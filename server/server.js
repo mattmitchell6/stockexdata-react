@@ -6,6 +6,8 @@ const path = require('path');
 const session = require('express-session');
 const mongoStore = require('connect-mongo')(session);
 
+const stocks = require('./routes/stocks')
+
 const app = express()
 require('dotenv').config();
 
@@ -38,7 +40,7 @@ app.use(passport.initialize())
 app.use(passport.session()) // calls the deserializeUser
 
 // Routes
-// app.use('/routes', xxxx)
+app.use('/api/stocks', stocks)
 
 // Starting Server
 app.listen(process.env.PORT || 8080, () => {
