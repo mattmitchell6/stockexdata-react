@@ -3,59 +3,77 @@ import axios from 'axios';
 import Fuse from 'fuse.js';
 import FilteredResult from './filteredResult'
 
+const WAIT_INTERVAL = 150;
+
 export default class Search extends Component {
 
   constructor() {
     super();
     this.state = {
       fuseItems: null,
-      pattern: null,
-      options: {
-        keys: [{
-          name: "symbol",
-          weight: .6
-        }, {
-          name: "companyName",
-          weight: .4
-        }]
-      }
+      pattern: "",
+      quickSearchStyle: {
+        display: "none"
+      },
+      quickSearchResults: []
     }
   }
 
   componentDidMount() {
+    const fuseOptions = {
+      keys: [{
+        name: "symbol",
+        weight: .6
+      }, {
+        name: "companyName",
+        weight: .4
+      }]
+    }
+
     axios.get('/api/stocks/all').then(res => {
       let stocks = res.data;
       this.setState({
-        fuseItems: new Fuse(stocks, this.state.options)
+        fuseItems: new Fuse(stocks, fuseOptions)
       })
     })
   }
 
   filteredResultsHandler = (event) => {
-    let pattern = event.target.value
+    clearTimeout(this.timer);
+
     this.setState({
-      pattern: pattern
+      pattern: event.target.value
     })
+
+    // Execute the debounced onChange method
+    this.timer = setTimeout(this.triggerChange, WAIT_INTERVAL);
+  }
+
+  triggerChange = () => {
+    const pattern = this.state.pattern;
+
+    const filteredresults = this.state.fuseItems.search(pattern).slice(0, 6)
+    const quickSearchResults = filteredresults.map((res) => {
+      return (
+        <FilteredResult key={res.item.symbol} symbol={res.item.symbol} companyName={res.item.companyName} />
+      );
+    });
+
+    let stateConfig = {
+      pattern: pattern,
+      quickSearchResults: quickSearchResults
+    }
+
+    if(pattern.length >= 2 && quickSearchResults.length > 0) {
+      stateConfig.quickSearchStyle = { display: "list-item" }
+    } else {
+      stateConfig.quickSearchStyle = { display: "none" }
+    }
+
+    this.setState(stateConfig)
   }
 
   render() {
-    let results;
-
-    if(this.state.pattern && this.state.pattern.length >= 2) {
-      const filteredresults = this.state.fuseItems.search(this.state.pattern).slice(0, 6)
-
-      results = filteredresults.map((res) => {
-        return (
-          <FilteredResult key={res.item.symbol} symbol={res.item.symbol} companyName={res.itemcompanyName} />
-          // <li key={move}>
-          //   <button onClick={() => this.jumpTo(move)}>{desc}</button>
-          // </li>
-        );
-      });
-      console.log(results);
-    }
-
-
     return(
       <div>
         <form className="mt-4">
@@ -69,14 +87,12 @@ export default class Search extends Component {
               placeholder="BOX, SQ, Apple, ..."
               onChange={this.filteredResultsHandler}
             />
-            <div className="dropdown-menu col-md-12" id="filteredResultsContainer">
-              {/* <div id="filteredResults"></div> */}
-              {results &&
-                results
-              }
-            </div>
             <div className="input-group-append">
               <button className="btn btn-blue" type="submit" data-loading="Searching...">Search</button>
+            </div>
+
+            <div className="dropdown-menu col-md-12" style={this.state.quickSearchStyle}>
+              {this.state.quickSearchResults}
             </div>
           </div>
         </form>
