@@ -30,7 +30,7 @@ export default class Search extends Component {
       }]
     }
 
-    axios.get('/api/stocks/all').then(res => {
+    axios.get('/api/stocks/fetchall').then(res => {
       let stocks = res.data;
       this.setState({
         fuseItems: new Fuse(stocks, fuseOptions)
@@ -51,8 +51,8 @@ export default class Search extends Component {
 
   triggerChange = () => {
     const pattern = this.state.pattern;
-
     const filteredresults = this.state.fuseItems.search(pattern).slice(0, 6)
+
     const quickSearchResults = filteredresults.map((res) => {
       return (
         <FilteredResult key={res.item.symbol} symbol={res.item.symbol} companyName={res.item.companyName} />
@@ -82,7 +82,6 @@ export default class Search extends Component {
               type="text"
               autoComplete="off"
               className="form-control"
-              id="stockInput"
               name="symbol"
               placeholder="BOX, SQ, Apple, ..."
               onChange={this.filteredResultsHandler}

@@ -12,4 +12,4 @@ let mostRecentQuoteSchema = new Schema({
 
 const MostRecentQuote = mongoose.model('MostRecentQuote', mostRecentQuoteSchema);
 
-module.exports = BasicInfo;
+module.exports = MostRecentQuote;

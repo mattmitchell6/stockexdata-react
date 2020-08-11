@@ -20,9 +20,22 @@ router.get('/', async function(req, res) {
 /**
  * get all available stocks for filtering
  */
-router.get('/all', async function(req, res) {
+router.get('/fetchall', async function(req, res) {
   const allStocks = await Company.find({})
   res.send(allStocks);
+});
+
+/**
+ * get stock quote
+ */
+router.get('/:symbol/quote', async function(req, res) {
+  try {
+    const quote = await IEX.getQuote(req.params.symbol)
+    res.send(quote);
+  } catch(e) {
+    console.log(e.message);
+    res.sendStatus(500)
+  }
 });
 
 module.exports = router;
