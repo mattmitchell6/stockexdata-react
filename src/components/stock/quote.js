@@ -10,28 +10,37 @@ export default class Quote extends Component {
   constructor(props){
     super(props)
     this.state = {
-      quote: null,
-      dailyStyle: null
+      quote: null
     }
   }
 
   componentDidMount() {
-    let quote, dailyStyle;
     axios.get(`/api/stocks/${this.props.symbol}/quote`).then(res => {
-      quote = res.data;
-
-      if(quote.change > 0) {
-        dailyStyle = "green"
-      } else if(quote.change == 0) {
-        dailyStyle = "neutral"
-      } else {
-        dailyStyle = "red"
-      }
       this.setState({
-        quote: quote,
-        dailyStyle: dailyStyle
+        quote: res.data
       })
     })
+  }
+
+  dailyChange = (change, changePercent) => {
+    let dailyStyle, changeText
+
+    if(change > 0) {
+      dailyStyle = "green";
+      changeText = ` +${changePercent}% (+${change})`;
+    } else if(change == 0) {
+      dailyStyle = "neutral"
+      changeText = ` ${changePercent}% (${change})`;
+    } else {
+      dailyStyle = "red";
+      changeText = ` ${changePercent}% (${change})`;
+    }
+
+    return (
+      <span className={`dailyChange ${dailyStyle}`} style={{fontSize: "70%"}}>
+         {changeText}
+      </span>
+    )
   }
 
 
@@ -43,7 +52,7 @@ export default class Quote extends Component {
       html = (
         <div>
           <h4>
-            {quote.companyName} <span className="textMuted">({quote.symbol})</span>
+            {quote.companyName} <span className="text-muted">({quote.symbol})</span>
             {/* {{#if user}}
               {{#if_in_list stock.quote.symbol user.watchlist}}
                 <a href="/watchlist/remove/{{stock.quote.symbol}}"><span class="watchlist"><i class="fas fa-star "></i></span></a>
@@ -57,13 +66,11 @@ export default class Quote extends Component {
           <h3>
             <span className="price" style={{fontWeight: "500"}}>${quote.latestPrice}</span>
 
-            <span className={`dailyChange ${this.state.dailyStyle}`} style={{fontSize: "70%"}}>
-               {quote.dailyChange.change}% ({quote.dailyChange.changePercent})
-              {/* // change="{{stock.quote.dailyChange.change}}"
-              // change-percent="{{stock.quote.dailyChange.changePercent}}"> */}
-            </span>
+            {this.dailyChange(quote.dailyChange.change, quote.dailyChange.changePercent)}
           </h3>
-          <div className="textMuted" style={{fontSize: "80%"}}>updated <span className="date"></span>last updated...</div>
+          <div className="textMuted" style={{fontSize: "80%"}}>
+            updated {moment(quote.latestUpdate).format('MM/DD h:mm a z')}
+          </div>
         </div>
       )
     } else {
