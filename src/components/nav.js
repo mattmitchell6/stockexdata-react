@@ -28,7 +28,7 @@ function Nav(props) {
               <form action="/search" method="get" className="form-inline" style={{paddingRight: ".8rem"}}>
                 <div className="search">
                   <span className="fa fa-search form-control-feedback mt-2"></span>
-                  <input type="text" autocomplete="off" className="form-control form-control-sm" id="stockInput" style={{width: "250px"}} name="symbol" placeholder="stock lookup" />
+                  <input type="text" autoComplete="off" className="form-control form-control-sm" id="stockInput" style={{width: "250px"}} name="symbol" placeholder="stock lookup" />
                   <div className="dropdown-menu col-md-12" id="filteredResultsContainer">
                     <div id="filteredResults"></div>
                   </div>

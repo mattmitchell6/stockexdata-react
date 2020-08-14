@@ -17,7 +17,7 @@ export default class Stock extends Component {
         <div className="container mtm">
           <div className="row d-flex justify-content-center">
             <div className="tab-content col-md-12">
-              <div class="tab-pane show active" id="login" role="tabpanel" aria-labelledby="login">
+              <div className="tab-pane show active" id="login" role="tabpanel" aria-labelledby="login">
 
                 {/* main info card */}
                 <MainInfoCard symbol={params.symbol} />

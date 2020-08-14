@@ -23,14 +23,12 @@ class IEX {
     const url = `${baseUrl}/${symbol}/quote?${token}`
     let quote = await Quote.findOne({'symbol': symbol.toUpperCase()});
 
-    console.log(quote);
-
     // update or create
     if(!quote || moment().diff(quote.lastUpdated, 'minutes') > 5) {
       let result = await axios.get(url);
       result = result.data
 
-      // calculate change
+      // calculate daily change
       result.dailyChange = dailyChange(result.latestPrice, result.previousClose)
 
       quote = await Quote.findOneAndUpdate(
