@@ -6,8 +6,7 @@ const Schema = mongoose.Schema;
 
 let basicInfoSchema = new Schema({
   symbol: {type: String, required: true},
-  info: String,
-  logo: String,
+  data: String,
   lastUpdated: Date
 });
 

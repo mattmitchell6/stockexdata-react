@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const Stock = require('../../models/stocks');
 const Quote = require('../../models/quote')
+const BasicInfo = require('../../models/basicInfo')
 // const request = require('./request');
 
 const baseUrl = "https://cloud.iexapis.com/stable/stock"
@@ -38,16 +39,49 @@ class IEX {
           data: JSON.stringify(result),
           lastUpdated: moment()
         },
-        {
-          upsert: true,
-          returnNewDocument: true
-        });
+        { upsert: true, new: true});
       }
 
      return {
        data: JSON.parse(quote.data)
      }
    }
+
+   /**
+    * get basic stock info
+    */
+   static async getBasicInfo(symbol) {
+     const logoUrl = `${baseUrl}/${symbol}/logo?${token}`
+     const companyInfoUrl = `${baseUrl}/${symbol}/company?${token}`
+
+     let basicInfo = await BasicInfo.findOne({'symbol': symbol.toUpperCase()});
+
+     // update or create
+     if(!basicInfo || moment().diff(basicInfo.lastUpdated, 'months') > 1) {
+       let logoResult = await axios.get(logoUrl);
+
+       let basicInfoResult = await axios.get(companyInfoUrl);
+       basicInfoResult = basicInfoResult.data;
+
+       basicInfoResult.logo = logoResult.data.url;
+       console.log('new logo: ');
+       console.log(basicInfoResult.logo);
+
+
+       basicInfo = await BasicInfo.findOneAndUpdate(
+         { 'symbol': symbol.toUpperCase() },
+         {
+           symbol: symbol.toUpperCase(),
+           data: JSON.stringify(basicInfoResult),
+           lastUpdated: moment()
+         },
+         { upsert: true, new: true});
+       }
+
+      return {
+        data: JSON.parse(basicInfo.data)
+      }
+    }
 
 
   /**

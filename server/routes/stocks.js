@@ -33,7 +33,20 @@ router.get('/:symbol/quote', async function(req, res) {
     const quote = await IEX.getQuote(req.params.symbol)
     res.send(quote.data);
   } catch(e) {
-    console.log(e.message);
+    console.log(e);
+    res.sendStatus(500)
+  }
+});
+
+/**
+ * get basic stock info
+ */
+router.get('/:symbol/basicinfo', async function(req, res) {
+  try {
+    const basicInfo = await IEX.getBasicInfo(req.params.symbol)
+    res.send(basicInfo.data);
+  } catch(e) {
+    console.log(e);
     res.sendStatus(500)
   }
 });

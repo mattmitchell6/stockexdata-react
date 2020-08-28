@@ -28,7 +28,7 @@ export default class Quote extends Component {
     if(change > 0) {
       dailyStyle = "green";
       changeText = ` +${changePercent}% (+${change})`;
-    } else if(change == 0) {
+    } else if(change === 0) {
       dailyStyle = "neutral"
       changeText = ` ${changePercent}% (${change})`;
     } else {
