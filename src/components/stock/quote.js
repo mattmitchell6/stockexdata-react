@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from 'axios'
 import moment from 'moment'
+const numeral = require('numeral');
 
 /**
  * quote
@@ -64,7 +65,7 @@ export default class Quote extends Component {
             {{/if}} */}
           </h4>
           <h3>
-            <span className="price" style={{fontWeight: "500"}}>${quote.latestPrice}</span>
+            <span className="price" style={{fontWeight: "500"}}>{numeral(quote.latestPrice).format('$0,0.00')}</span>
 
             {this.dailyChange(quote.dailyChange.change, quote.dailyChange.changePercent)}
           </h3>
