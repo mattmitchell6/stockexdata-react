@@ -51,4 +51,22 @@ router.get('/:symbol/basicinfo', async function(req, res) {
   }
 });
 
+/**
+ * get key stats and logo
+ */
+router.get('/:symbol/keystats', async function(req, res) {
+  try {
+    const basicInfo = await IEX.getBasicInfo(req.params.symbol)
+    const keyStats = await IEX.getKeyStats(req.params.symbol)
+
+    res.send({
+      logo: basicInfo.data.logo,
+      keyStats: keyStats.data
+    });
+  } catch(e) {
+    console.log(e);
+    res.sendStatus(500)
+  }
+});
+
 module.exports = router;

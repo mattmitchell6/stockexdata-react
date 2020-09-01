@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Nav from './nav'
 import MainInfoCard from './stock/mainInfoCard'
+import BasicInfoCard from './stock/basicInfoCard'
 
 /**
  * stock page
@@ -21,6 +22,9 @@ export default class Stock extends Component {
 
                 {/* main info card */}
                 <MainInfoCard symbol={params.symbol} />
+
+                {/* basic info card */}
+                <BasicInfoCard symbol={params.symbol} />
 
               </div>
             </div>
