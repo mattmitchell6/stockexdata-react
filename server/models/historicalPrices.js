@@ -4,12 +4,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-let historySchema = new Schema({
+let historicalPricesSchema = new Schema({
   symbol: {type: String, required: true},
   data: String,
   lastUpdated: Date
 });
 
-const History = mongoose.model('History', historySchema);
+const HistoricalPrices = mongoose.model('HistoricalPrices', historicalPricesSchema);
 
-module.exports = History;
+module.exports = HistoricalPrices;

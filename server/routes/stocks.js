@@ -69,4 +69,20 @@ router.get('/:symbol/keystats', async function(req, res) {
   }
 });
 
+/**
+ * get historical stock prices
+ */
+router.get('/:symbol/historicalprices', async function(req, res) {
+  try {
+    const historicalPrices = await IEX.getHistoricalPrices(req.params.symbol)
+
+    // split prices and dates and fetch most recent quote
+
+    res.send(historicalPrices.data);
+  } catch(e) {
+    console.log(e);
+    res.sendStatus(500)
+  }
+});
+
 module.exports = router;

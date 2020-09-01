@@ -9,6 +9,7 @@ const Stock = require('../../models/stocks');
 const Quote = require('../../models/quote')
 const BasicInfo = require('../../models/basicInfo')
 const KeyStats = require('../../models/keyStats')
+const HistoricalPrices = require('../../models/historicalPrices')
 // const request = require('./request');
 
 const baseUrl = "https://cloud.iexapis.com/stable/stock"
@@ -51,30 +52,30 @@ class IEX {
    /**
     * get basic stock info
     */
-   static async getBasicInfo(symbol) {
-     const logoUrl = `${baseUrl}/${symbol}/logo?${token}`
-     const companyInfoUrl = `${baseUrl}/${symbol}/company?${token}`
+  static async getBasicInfo(symbol) {
+    const logoUrl = `${baseUrl}/${symbol}/logo?${token}`
+    const companyInfoUrl = `${baseUrl}/${symbol}/company?${token}`
 
-     let basicInfo = await BasicInfo.findOne({'symbol': symbol.toUpperCase()});
+    let basicInfo = await BasicInfo.findOne({'symbol': symbol.toUpperCase()});
 
-     // update or create
-     if(!basicInfo || moment().diff(basicInfo.lastUpdated, 'months') > 1) {
-       let logoResult = await axios.get(logoUrl);
+    // update or create
+    if(!basicInfo || moment().diff(basicInfo.lastUpdated, 'months') > 1) {
+      let logoResult = await axios.get(logoUrl);
 
-       let basicInfoResult = await axios.get(companyInfoUrl);
-       basicInfoResult = basicInfoResult.data;
+      let basicInfoResult = await axios.get(companyInfoUrl);
+      basicInfoResult = basicInfoResult.data;
 
-       basicInfoResult.logo = logoResult.data.url;
+      basicInfoResult.logo = logoResult.data.url;
 
-       basicInfo = await BasicInfo.findOneAndUpdate(
-         { 'symbol': symbol.toUpperCase() },
-         {
-           symbol: symbol.toUpperCase(),
-           data: JSON.stringify(basicInfoResult),
-           lastUpdated: moment()
-         },
-         { upsert: true, new: true});
-       }
+      basicInfo = await BasicInfo.findOneAndUpdate(
+        { 'symbol': symbol.toUpperCase() },
+        {
+          symbol: symbol.toUpperCase(),
+          data: JSON.stringify(basicInfoResult),
+          lastUpdated: moment()
+        },
+        { upsert: true, new: true});
+      }
 
       return {
         data: JSON.parse(basicInfo.data)
@@ -90,7 +91,7 @@ class IEX {
       let keyStats = await KeyStats.findOne({'symbol': symbol.toUpperCase()});
 
       // update or create
-      if(!keyStats || moment().isAfter(keyStats.lastUpdated, 'months')) {
+      if(!keyStats || moment().isAfter(keyStats.lastUpdated, 'day')) {
         let keyStatsResult = await axios.get(url);
         keyStatsResult = keyStatsResult.data;
 
@@ -109,6 +110,78 @@ class IEX {
        }
      }
 
+    /**
+     * get historical stock prices
+     */
+    static async getHistoricalPrices(symbol) {
+      const maxPricesUrl = `${baseUrl}/${symbol}/chart/max?${token}&chartInterval=1&chartCloseOnly=true`
+      let historicalPricesResult;
+
+      let historicalPrices = await HistoricalPrices.findOne({'symbol': symbol.toUpperCase()});
+
+      // if historicalPrices do not exist, fetch all
+      if(!historicalPrices) {
+        historicalPricesResult = await axios.get(maxPricesUrl);
+        historicalPricesResult = historicalPricesResult.data;
+
+        historicalPrices = await HistoricalPrices.findOneAndUpdate(
+          { 'symbol': symbol.toUpperCase() },
+          {
+            symbol: symbol.toUpperCase(),
+            data: JSON.stringify(historicalPricesResult),
+            lastUpdated: moment()
+          },
+          { upsert: true, new: true});
+      // if historicalPrices exist and haven't been updated in a day, update
+      } else if(moment().isAfter(historicalPrices.lastUpdated, 'day')) {
+        let history = JSON.parse(historicalPrices.data);
+        let previousMostRecentQuote = history[history.length - 1];
+        let currentTime = moment();
+        let range;
+
+        // see how many historical stock prices we've missed
+        if(currentTime.diff(previousMostRecentQuote.date, 'days') <= 5) {
+          range = '5d';
+        } else if(currentTime.diff(previousMostRecentQuote.date, 'months') <= 1) {
+          range = '1m';
+        } else if(currentTime.diff(previousMostRecentQuote.date, 'months') <= 3) {
+          range = '3m';
+        } else if(currentTime.diff(previousMostRecentQuote.date, 'months') <= 6) {
+          range = '6m';
+        } else if(currentTime.diff(previousMostRecentQuote.date, 'years') <= 1) {
+          range = '1y';
+        } else if(currentTime.diff(previousMostRecentQuote.date, 'years') <= 2) {
+          range = '2y';
+        } else {
+          range = 'max';
+        }
+
+        // fetch daily stock prices based on calculated range above
+        const updatePricesUrl = `${baseUrl}/${symbol}/chart/${range}?${token}&chartInterval=1&chartCloseOnly=true`
+        historicalPricesResult = await axios.get(updatePricesUrl);
+
+        // fill in daily price gaps
+        let toAddDates = historicalPricesResult.data.filter(function(day, index, arr) {
+          return moment(day.date).isAfter(previousMostRecentQuote.date, 'day')
+        });
+
+        history = history.concat(toAddDates);
+
+        // update prices
+        historicalPrices = await HistoricalPrices.findOneAndUpdate(
+          { 'symbol': symbol.toUpperCase() },
+          {
+            symbol: symbol.toUpperCase(),
+            data: JSON.stringify(history),
+            lastUpdated: moment()
+          },
+          { upsert: true, new: true});
+      }
+
+      return {
+        data: JSON.parse(historicalPrices.data)
+      }
+    }
 
 
   /**
