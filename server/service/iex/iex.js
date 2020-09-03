@@ -10,6 +10,7 @@ const Quote = require('../../models/quote')
 const BasicInfo = require('../../models/basicInfo')
 const KeyStats = require('../../models/keyStats')
 const HistoricalPrices = require('../../models/historicalPrices')
+const Earnings = require('../../models/earnings')
 // const request = require('./request');
 
 const baseUrl = "https://cloud.iexapis.com/stable/stock"
@@ -44,9 +45,7 @@ class IEX {
         { upsert: true, new: true});
       }
 
-     return {
-       data: JSON.parse(quote.data)
-     }
+     return JSON.parse(quote.data)
    }
 
    /**
@@ -77,9 +76,7 @@ class IEX {
         { upsert: true, new: true});
       }
 
-      return {
-        data: JSON.parse(basicInfo.data)
-      }
+      return JSON.parse(basicInfo.data)
     }
 
     /**
@@ -105,9 +102,7 @@ class IEX {
           { upsert: true, new: true});
         }
 
-       return {
-         data: JSON.parse(keyStats.data)
-       }
+       return JSON.parse(keyStats.data)
      }
 
     /**
@@ -178,10 +173,62 @@ class IEX {
           { upsert: true, new: true});
       }
 
-      return {
-        data: JSON.parse(historicalPrices.data)
-      }
+      return JSON.parse(historicalPrices.data)
     }
+
+    /**
+     * get earnings data
+     */
+    static async getEarnings(symbol) {
+      let quarterlyIncomeResult, annualIncomeResult, earningsResult, lastReported;
+      const quarterlyIncomeUrl = `${baseUrl}/${symbol}/income?last=4&period=quarter&${token}`;
+      const annualIncomeUrl = `${baseUrl}/${symbol}/income?last=4&period=annual&${token}`;
+      const earningsUrl = `${baseUrl}/${symbol}/earnings?last=4&${token}`;
+
+      let earnings = await Earnings.findOne({'symbol': symbol.toUpperCase()});
+      let keyStats = await this.getKeyStats(symbol);
+
+      if(!earnings || !keyStats || moment(keyStats.nextEarningsDate).diff(earnings.lastReported, 'days') > 150) {
+
+        // make calls to fetch last 4 four quarters of income / earnings statements
+        [quarterlyIncomeResult, annualIncomeResult, earningsResult] = await Promise.all([
+          axios.get(quarterlyIncomeUrl),
+          axios.get(annualIncomeUrl),
+          axios.get(earningsUrl)
+        ])
+
+        if(!isEmpty(earningsResult.data) && !isEmpty(quarterlyIncomeResult.data) && !isEmpty(annualIncomeResult.data)) {
+          quarterlyIncomeResult = JSON.stringify(quarterlyIncomeResult.data.income.reverse());
+          annualIncomeResult = JSON.stringify(annualIncomeResult.data.income.reverse());
+
+          earningsResult = earningsResult.data.earnings.reverse();
+          lastReported = earningsResult[earningsResult.length - 1].EPSReportDate
+          earningsResult = JSON.stringify(earningsResult)
+        } else {
+          quarterlyIncomeResult = null;
+          annualIncomeResult = null;
+          earningsResult = null;
+          lastReported = moment();
+        }
+
+        earnings = await Earnings.findOneAndUpdate(
+          { 'symbol': symbol.toUpperCase() },
+          {
+            symbol: symbol.toUpperCase(),
+            quarterlyIncomeData: quarterlyIncomeResult,
+            annualIncomeData: annualIncomeResult,
+            earningsData: earningsResult,
+            lastReported: lastReported
+          },
+          { upsert: true, new: true});
+     }
+
+     return {
+       earningsData: JSON.parse(earnings.earningsData),
+       quarterlyIncomeData: JSON.parse(earnings.quarterlyIncomeData),
+       annualIncomeData: JSON.parse(earnings.annualIncomeData)
+     }
+   }
 
 
   /**
@@ -309,6 +356,13 @@ function dailyChange(latestPrice, previousClose) {
     changePercent: changePercent,
     change: change
   }
+}
+
+/**
+ * is the object empty?
+ */
+function isEmpty(obj) {
+  return Object.getOwnPropertyNames(obj).length === 0;
 }
 
 /**

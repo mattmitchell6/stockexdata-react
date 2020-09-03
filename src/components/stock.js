@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import Nav from './nav'
 import MainInfoCard from './stock/mainInfoCard'
 import BasicInfoCard from './stock/basicInfoCard'
-import HistoricalChartCard from './stock/historicalChartCard'
+import HistoricalPriceCard from './stock/historicalPriceCard'
+import EarningsCards from './stock/earningsCards'
 
 /**
  * stock page
@@ -26,14 +27,17 @@ export default class Stock extends Component {
 
 
                 <div className="row">
-                  {/* basic info card */}
                   <div className="col-lg-4 col-md-12">
+                    {/* basic info card */}
                     <BasicInfoCard symbol={params.symbol} />
+
+
+                    <EarningsCards symbol={params.symbol} />
                   </div>
 
                   {/* basic info card */}
                   <div className="col-lg-8 col-md-12">
-                    <HistoricalChartCard symbol={params.symbol} />
+                    <HistoricalPriceCard symbol={params.symbol} />
                   </div>
                 </div>
 

@@ -2,6 +2,7 @@
  * Stock api
  */
 const router = require('express').Router();
+const moment = require('moment');
 
 // const Stock = require('../models/stocks');
 // const User = require('../models/users');
@@ -31,7 +32,7 @@ router.get('/fetchall', async function(req, res) {
 router.get('/:symbol/quote', async function(req, res) {
   try {
     const quote = await IEX.getQuote(req.params.symbol)
-    res.send(quote.data);
+    res.send(quote);
   } catch(e) {
     console.log(e);
     res.sendStatus(500)
@@ -44,7 +45,7 @@ router.get('/:symbol/quote', async function(req, res) {
 router.get('/:symbol/basicinfo', async function(req, res) {
   try {
     const basicInfo = await IEX.getBasicInfo(req.params.symbol)
-    res.send(basicInfo.data);
+    res.send(basicInfo);
   } catch(e) {
     console.log(e);
     res.sendStatus(500)
@@ -60,8 +61,8 @@ router.get('/:symbol/keystats', async function(req, res) {
     const keyStats = await IEX.getKeyStats(req.params.symbol)
 
     res.send({
-      logo: basicInfo.data.logo,
-      keyStats: keyStats.data
+      logo: basicInfo.logo,
+      keyStats: keyStats
     });
   } catch(e) {
     console.log(e);
@@ -75,10 +76,72 @@ router.get('/:symbol/keystats', async function(req, res) {
 router.get('/:symbol/historicalprices', async function(req, res) {
   try {
     const historicalPrices = await IEX.getHistoricalPrices(req.params.symbol)
+    const latestQuote = await IEX.getQuote(req.params.symbol)
+    let prices = [], dates = [];
 
-    // split prices and dates and fetch most recent quote
+    // return appropriate date range values
+    for(i = 0; i < historicalPrices.length; i++) {
+      dates.push(historicalPrices[i].date);
+      prices.push(historicalPrices[i].close);
+    }
 
-    res.send(historicalPrices.data);
+    // append most recent quote price
+    if(moment(latestQuote.latestUpdate).isAfter(historicalPrices[historicalPrices.length - 1].date, 'day')) {
+      dates.push(moment(latestQuote.latestUpdate).format("YYYY-MM-DD"))
+      prices.push(latestQuote.latestPrice)
+    }
+
+    res.send({dates: dates, prices: prices});
+  } catch(e) {
+    console.log(e);
+    res.sendStatus(500)
+  }
+});
+
+/**
+ * get earnings data
+ */
+router.get('/:symbol/earnings', async function(req, res) {
+  let fiscalPeriods = {quarterly: [], annual: []},
+    totalRevenueData = {quarterly: [], annual: []},
+    netIncomeData = {quarterly: [], annual: []},
+    earningsActual = [],
+    earningsEstimate = [];
+
+  try {
+    const earnings = await IEX.getEarnings(req.params.symbol)
+
+    // populate quarterly income data
+    for(let i = 0; i < earnings.earningsData.length; i++) {
+      fiscalPeriods.quarterly.push(earnings.earningsData[i].fiscalPeriod);
+      totalRevenueData.quarterly.push(earnings.quarterlyIncomeData[i].totalRevenue);
+      netIncomeData.quarterly.push(earnings.quarterlyIncomeData[i].netIncome);
+    }
+
+    // populate annual income data
+    for(i = 0; i < earnings.annualIncomeData.length; i++) {
+      fiscalPeriods.annual.push(earnings.annualIncomeData[i].reportDate);
+      totalRevenueData.annual.push(earnings.annualIncomeData[i].totalRevenue);
+      netIncomeData.annual.push(earnings.annualIncomeData[i].netIncome);
+    }
+
+    // populate quarterly EPS data
+    for(i = 0; i < earnings.earningsData.length; i++) {
+      earningsActual.push(earnings.earningsData[i].actualEPS);
+      earningsEstimate.push(earnings.earningsData[i].consensusEPS);
+    }
+
+    res.send({
+      fiscalPeriods: fiscalPeriods,
+      income: {
+        totalRevenueData: totalRevenueData,
+        netIncomeData: netIncomeData
+      },
+      earnings: {
+        earningsActual: earningsActual,
+        earningsEstimate: earningsEstimate
+      }
+    });
   } catch(e) {
     console.log(e);
     res.sendStatus(500)
