@@ -19,6 +19,7 @@ export default class EarningsCards extends Component {
   }
 
   componentDidMount() {
+    console.log('componentDidMount...');
     axios.get(`/api/stocks/${this.props.symbol}/earnings`).then(res => {
       this.setState({
         income: res.data.income,
@@ -67,14 +68,12 @@ export default class EarningsCards extends Component {
 
   render() {
     const incomePeriod = this.state.incomePeriod
+    // const earnings = this.state.earnings;
     const incomeData = this.organizeIncomeData(incomePeriod, this.state.income, this.state.fiscalPeriods)
-
-    const earnings = this.state.earnings;
-    const fiscalPeriods = this.state.fiscalPeriods;
 
     return (
       <div>
-        {!incomeData ? (
+        {!incomeData.totalRevenueData || !incomeData.netIncomeData ? (
           <div>
             loading...
           </div>
@@ -110,7 +109,6 @@ export default class EarningsCards extends Component {
                 />
               </div>
             </div>
-
           </div>
         )}
       </div>

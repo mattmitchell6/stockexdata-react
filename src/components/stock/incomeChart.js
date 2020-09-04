@@ -4,7 +4,7 @@ import numeral from 'numeral'
 
 function IncomeChart(props) {
 
-  const data = {
+  let data = {
     labels: props.incomePeriods,
     datasets: [{
       label: "Revenue",
@@ -20,13 +20,14 @@ function IncomeChart(props) {
       borderWidth: 1
     }]
   }
+  data = JSON.parse(JSON.stringify(data));
 
   const options = {
     legend: {
       display: true
     },
     elements: {
-      point:{
+      point: {
         radius: 0
       }
     },

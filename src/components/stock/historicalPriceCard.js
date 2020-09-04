@@ -133,7 +133,7 @@ export default class HistoricalPriceCard extends Component {
               </div>
 
             {/* stock chart */}
-            {!data ? (
+            {!data.dates || !data.prices ? (
               <div>
                 loading...
               </div>
