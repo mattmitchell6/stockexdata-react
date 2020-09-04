@@ -95,7 +95,6 @@ export default class HistoricalPriceCard extends Component {
   }
 
 
-
   render() {
     let range = this.state.range;
     const data = this.organizeRangeData(range, this.state.dates, this.state.prices)

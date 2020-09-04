@@ -13,7 +13,8 @@ export default class EarningsCards extends Component {
     this.state = {
       income: null,
       earnings: null,
-      fiscalPeriods: null
+      fiscalPeriods: null,
+      incomePeriod: "quarterly"
     }
   }
 
@@ -27,15 +28,57 @@ export default class EarningsCards extends Component {
     })
   }
 
+  activePeriod = (period) => {
+    const currentPeriod = this.state.incomePeriod;
+    let periodClass = "";
+
+    if(period === currentPeriod) {
+      periodClass = "active"
+    }
+
+    return periodClass;
+  }
+
+  updateIncomePeriod = (period) => {
+    this.setState({
+      incomePeriod: period
+    })
+  }
+
+  organizeIncomeData = (incomePeriod, income, fiscalPeriods) => {
+    let incomePeriods, totalRevenueData, netIncomeData;
+
+    if(income && incomePeriod == "quarterly") {
+      incomePeriods = fiscalPeriods.quarterly;
+      totalRevenueData = income.totalRevenueData.quarterly
+      netIncomeData = income.netIncomeData.quarterly
+    } else if(income && incomePeriod == "annual") {
+      incomePeriods = fiscalPeriods.annual;
+      totalRevenueData = income.totalRevenueData.annual
+      netIncomeData = income.netIncomeData.annual
+    }
+
+    return {
+      incomePeriods: incomePeriods,
+      totalRevenueData: totalRevenueData,
+      netIncomeData: netIncomeData
+    }
+  }
 
   render() {
+    const incomePeriod = this.state.incomePeriod
+    const incomeData = this.organizeIncomeData(incomePeriod, this.state.income, this.state.fiscalPeriods)
+
     const earnings = this.state.earnings;
-    const income = this.state.income
-    const fiscalPeriods = this.state.fiscalPeriods
+    const fiscalPeriods = this.state.fiscalPeriods;
 
     return (
       <div>
-        {income &&
+        {!incomeData ? (
+          <div>
+            loading...
+          </div>
+        ) : (
           // income card
           <div className="card card-body mb20">
             <div className="row mbs">
@@ -45,27 +88,31 @@ export default class EarningsCards extends Component {
               <div className="col-sm-7 col-12">
                 <nav className="nav pull-right">
                   <span
-                    className="nav-link financials range active"
-                    // onClick={() => this.updateFinancialsRange('quarterly')}>
-                    >
+                    className={`nav-link range ${this.activePeriod('quarterly')}`}
+                    onClick={() => this.updateIncomePeriod('quarterly')}
+                  >
                     Quarterly
                   </span>
                   <span
-                    className="nav-link financials range"
-                    // onClick={() => this.updateFinancialsRange('annual')}>
-                    >
+                    className={`nav-link range ${this.activePeriod('annual')}`}
+                    onClick={() => this.updateIncomePeriod('annual')}
+                  >
                     Annual
                   </span>
                 </nav>
               </div>
 
               <div className="col-12">
-                <IncomeChart fiscalPeriods={fiscalPeriods} income={income}/>
+                <IncomeChart
+                  incomePeriods={incomeData.incomePeriods}
+                  totalRevenueData={incomeData.totalRevenueData}
+                  netIncomeData={incomeData.netIncomeData}
+                />
               </div>
             </div>
 
           </div>
-        }
+        )}
       </div>
     )
   }

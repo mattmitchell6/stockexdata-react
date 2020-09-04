@@ -31,7 +31,6 @@ export default class Stock extends Component {
                     {/* basic info card */}
                     <BasicInfoCard symbol={params.symbol} />
 
-
                     <EarningsCards symbol={params.symbol} />
                   </div>
 

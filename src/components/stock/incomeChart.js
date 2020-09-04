@@ -5,16 +5,16 @@ import numeral from 'numeral'
 function IncomeChart(props) {
 
   const data = {
-    labels: props.fiscalPeriods.quarterly,
+    labels: props.incomePeriods,
     datasets: [{
       label: "Revenue",
-      data: props.income.totalRevenueData.quarterly,
+      data: props.totalRevenueData,
       backgroundColor: 'rgba(130, 205, 255, 0.2)',
       borderColor: '#2BAAFF',
       borderWidth: 1
     }, {
       label: "Earnings",
-      data: props.income.netIncomeData.quarterly,
+      data: props.netIncomeData,
       backgroundColor: 'rgba(255, 208, 227, 0.2)',
       borderColor: 'rgba(255, 99, 132, 1)',
       borderWidth: 1
@@ -35,11 +35,11 @@ function IncomeChart(props) {
         gridLines: {
           borderDash: [8, 4]
         },
-        // ticks: {
-        //   callback: function(value, index, values) {
-        //     return numeral(value).format('0.00a').toUpperCase()
-        //   }
-        // }
+        ticks: {
+          callback: function(value, index, values) {
+            return numeral(value).format('0.00a').toUpperCase()
+          }
+        }
       }],
       xAxes: [{
         gridLines: {
@@ -64,8 +64,8 @@ function IncomeChart(props) {
   }
 
   return(
-    <div style={{height: "224px"}}>
-      <Bar data={data} options={options}/>
+    <div>
+      <Bar data={data} options={options}  height={224}/>
     </div>
   )
 }

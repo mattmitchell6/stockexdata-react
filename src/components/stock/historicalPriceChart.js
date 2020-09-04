@@ -64,9 +64,8 @@ function HistoricalPriceChart(props) {
   }
 
   return(
-    <div style={{height: "420px"}}>
-
-      <Line data={data} options={options}/>
+    <div>
+      <Line data={data} options={options} height={407}/>
     </div>
   )
 }
