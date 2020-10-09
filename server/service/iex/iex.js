@@ -11,6 +11,7 @@ const BasicInfo = require('../../models/basicInfo')
 const KeyStats = require('../../models/keyStats')
 const HistoricalPrices = require('../../models/historicalPrices')
 const Earnings = require('../../models/earnings')
+const News = require('../../models/news');
 // const request = require('./request');
 
 const baseUrl = "https://cloud.iexapis.com/stable/stock"
@@ -230,6 +231,36 @@ class IEX {
      }
    }
 
+   /**
+    * get news
+    */
+    static async getNews(symbol) {
+      const newsUrl = `${baseUrl}/${symbol}/news/last?${token}`
+
+      let news = await News.findOne({'symbol': symbol.toUpperCase()});
+
+      // update or create
+      if(!news || moment().isAfter(news.lastUpdated, 'day')) {
+        let newsResult = await axios.get(newsUrl);
+        newsResult = newsResult.data
+
+        // max out news summary character count at 200 chars
+        for(let i = 0; i < newsResult.length; i++) {
+          newsResult[i].summary = newsResult[i].summary.substr(0, MAX_NEWS_SUMMARY) + "..."
+        }
+
+        news = await News.findOneAndUpdate(
+          { 'symbol': symbol.toUpperCase() },
+          {
+            symbol: symbol.toUpperCase(),
+            data: JSON.stringify(newsResult),
+            lastUpdated: moment()
+          },
+          { upsert: true, new: true});
+        }
+
+        return JSON.parse(news.data)
+      }
 
   /**
    * fetch all stock data

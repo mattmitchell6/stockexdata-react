@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import axios from 'axios'
 
-import IncomeChart from './incomeChart.js'
+import IncomeChart from './charts/incomeChart.js'
+import EpsChart from './charts/epsChart.js'
 
 /**
  * earnings card
@@ -19,7 +20,6 @@ export default class EarningsCards extends Component {
   }
 
   componentDidMount() {
-    console.log('componentDidMount...');
     axios.get(`/api/stocks/${this.props.symbol}/earnings`).then(res => {
       this.setState({
         income: res.data.income,
@@ -67,8 +67,9 @@ export default class EarningsCards extends Component {
   }
 
   render() {
-    const incomePeriod = this.state.incomePeriod
-    // const earnings = this.state.earnings;
+    const incomePeriod = this.state.incomePeriod;
+    const fiscalPeriods = this.state.fiscalPeriods;
+    const earnings = this.state.earnings;
     const incomeData = this.organizeIncomeData(incomePeriod, this.state.income, this.state.fiscalPeriods)
 
     return (
@@ -78,35 +79,54 @@ export default class EarningsCards extends Component {
             loading...
           </div>
         ) : (
-          // income card
-          <div className="card card-body mb20">
-            <div className="row mbs">
-              <div className="col-sm-5 col-12 mbs">
-                <h5>Financials</h5>
-              </div>
-              <div className="col-sm-7 col-12">
-                <nav className="nav pull-right">
-                  <span
-                    className={`nav-link range ${this.activePeriod('quarterly')}`}
-                    onClick={() => this.updateIncomePeriod('quarterly')}
-                  >
-                    Quarterly
-                  </span>
-                  <span
-                    className={`nav-link range ${this.activePeriod('annual')}`}
-                    onClick={() => this.updateIncomePeriod('annual')}
-                  >
-                    Annual
-                  </span>
-                </nav>
-              </div>
+          <div>
+            {/* income card */}
+            <div className="card card-body mb20">
+              <div className="row mbs">
+                <div className="col-sm-5 col-12 mbs">
+                  <h5>Financials</h5>
+                </div>
+                <div className="col-sm-7 col-12">
+                  <nav className="nav pull-right">
+                    <span
+                      className={`nav-link range ${this.activePeriod('quarterly')}`}
+                      onClick={() => this.updateIncomePeriod('quarterly')}
+                    >
+                      Quarterly
+                    </span>
+                    <span
+                      className={`nav-link range ${this.activePeriod('annual')}`}
+                      onClick={() => this.updateIncomePeriod('annual')}
+                    >
+                      Annual
+                    </span>
+                  </nav>
+                </div>
 
-              <div className="col-12">
-                <IncomeChart
-                  incomePeriods={incomeData.incomePeriods}
-                  totalRevenueData={incomeData.totalRevenueData}
-                  netIncomeData={incomeData.netIncomeData}
-                />
+                <div className="col-12">
+                  <IncomeChart
+                    incomePeriods={incomeData.incomePeriods}
+                    totalRevenueData={incomeData.totalRevenueData}
+                    netIncomeData={incomeData.netIncomeData}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* income card */}
+            <div className="card card-body mb20">
+              <div className="row mbs">
+                <div className="col-12 mbs">
+                  <h5>Earnings</h5>
+                </div>
+
+                <div className="col-12">
+                  <EpsChart
+                    earningsPeriods={fiscalPeriods.quarterly}
+                    earningsActual={earnings.earningsActual}
+                    earningsEstimate={earnings.earningsEstimate}
+                  />
+                </div>
               </div>
             </div>
           </div>

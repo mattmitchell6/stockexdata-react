@@ -4,6 +4,7 @@ import MainInfoCard from './stock/mainInfoCard'
 import BasicInfoCard from './stock/basicInfoCard'
 import HistoricalPriceCard from './stock/historicalPriceCard'
 import EarningsCards from './stock/earningsCards'
+import NewsCards from './stock/newsCards'
 
 /**
  * stock page
@@ -25,18 +26,17 @@ export default class Stock extends Component {
                 {/* main info card */}
                 <MainInfoCard symbol={params.symbol} />
 
-
                 <div className="row">
                   <div className="col-lg-4 col-md-12">
-                    {/* basic info card */}
                     <BasicInfoCard symbol={params.symbol} />
 
                     <EarningsCards symbol={params.symbol} />
                   </div>
 
-                  {/* basic info card */}
                   <div className="col-lg-8 col-md-12">
                     <HistoricalPriceCard symbol={params.symbol} />
+
+                    <NewsCards symbol={params.symbol} />
                   </div>
                 </div>
 

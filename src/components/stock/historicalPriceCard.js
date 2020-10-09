@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from 'axios'
 import moment from 'moment'
 
-import HistoricalPriceChart from './historicalPriceChart'
+import HistoricalPriceChart from './charts/historicalPriceChart'
 
 /**
  * historical chart card
