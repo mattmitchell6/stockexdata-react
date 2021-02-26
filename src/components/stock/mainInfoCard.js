@@ -4,6 +4,7 @@ import numeral from 'numeral';
 import moment from 'moment';
 
 import Quote from './quote';
+import Loader from '../Loader'
 
 /**
  * main info card
@@ -53,7 +54,7 @@ export default class MainInfoCard extends Component {
           </div>
 
           {!logo ? (
-            <div  className="pull-right" >loading...</div>
+            <div  className="pull-right" ><Loader /></div>
           ) : (
             <div className="col-sm-4 d-none d-sm-block mbm">
               <img src={logo} height="50px" alt="" className="pull-right logo" />
@@ -63,7 +64,7 @@ export default class MainInfoCard extends Component {
 
         {!keyStats ? (
           <div className="row">
-            <div className="col-md-12">loading...</div>
+            <div className="col-md-12"><Loader /></div>
           </div>
         ) : (
           <div className="row">

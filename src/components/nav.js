@@ -1,13 +1,39 @@
 import React from 'react';
+import GoogleLogin from 'react-google-login';
 import logo from '../logo.png';
 import '../App.css';
 
 import SearchBar from './SearchBar'
+import Loader from './Loader'
+import { UseGoogleAuthContext } from './GoogleAuth';
 
 /**
  * Navbar component
  */
 function Nav(props) {
+  const auth = UseGoogleAuthContext()
+
+  const renderUserContent = () => {
+    if(auth.loading) {
+      return <Loader />
+    } else if(auth.user) {
+      return (
+        <span className="login-link" onClick={auth.logOut}>Logout</span>
+      )
+    } else {
+      return (
+        <GoogleLogin
+          clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+          buttonText="Login"
+          onSuccess={auth.logIn}
+          onFailure={null}
+          cookiePolicy={'single_host_origin'}
+          style={{fontSize: "8px"}}
+        />
+      )
+    }
+  }
+
   return (
     <div>
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
@@ -31,15 +57,7 @@ function Nav(props) {
             }
             <ul className="navbar-nav mr-auto">
               <li className="nav-item active">
-                {/* TODO: user auth */}
-                {/* {{#if user}}
-                  <a class="login-link" href="/auth/logout">Logout</a>
-                {{else}}
-                  <a class="btn btn-sm btn-light" href="/auth/google">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1024px-Google_%22G%22_Logo.svg.png" height="18px" style="margin-right: 3px" alt="">
-                    Login
-                  </a>
-                {{/if}} */}
+                {renderUserContent()}
               </li>
             </ul>
           </div>

@@ -1,7 +1,10 @@
+
 import React, { Component } from "react";
 import axios from 'axios'
 import moment from 'moment'
-const numeral = require('numeral');
+import numeral from 'numeral';
+
+import Loader from "../Loader";
 
 /**
  * quote
@@ -76,7 +79,7 @@ export default class Quote extends Component {
       )
     } else {
       html = (
-        <div>loading...</div>
+        <Loader />
       )
     }
 

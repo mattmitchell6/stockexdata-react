@@ -3,6 +3,7 @@ import axios from 'axios'
 
 import IncomeChart from './charts/incomeChart.js'
 import EpsChart from './charts/epsChart.js'
+import Loader from '../Loader'
 
 /**
  * earnings card
@@ -76,7 +77,7 @@ export default class EarningsCards extends Component {
       <div>
         {!incomeData.totalRevenueData || !incomeData.netIncomeData ? (
           <div>
-            loading...
+            <Loader />
           </div>
         ) : (
           <div>

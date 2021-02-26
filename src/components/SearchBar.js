@@ -10,7 +10,6 @@ const WAIT_INTERVAL = 150;
 
 function SearchBar(props) {
   const [fuseItems, setFuseItems] = useState(null)
-  const [pattern, setPattern] = useState("")
   const [quickSearchStyle, setQuickSearchStyle] = useState({display: "none"})
   const [quickSearchResults, setQuickSearchResults] = useState([])
   const [timer, setTimer] = useState(null)
@@ -63,7 +62,6 @@ function SearchBar(props) {
 
     setQuickSearchStyle(updatedSearchStyle)
     setQuickSearchResults(updatedQuickSearchResults)
-    setPattern(updatedPattern)
   }
 
   const renderContent = () => {

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import axios from 'axios'
 import moment from 'moment';
 
+import Loader from '../Loader'
+
 /**
  * news cards
  */
@@ -33,7 +35,7 @@ export default class newsCards extends Component {
 
           {!news ? (
             <div>
-              loading...
+              <Loader />
             </div>
           ) : (
             <div>

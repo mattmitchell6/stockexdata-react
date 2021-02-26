@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 function Loader() {
 
     return(
-      <div style={{color: "white"}}>
-        loading...
+      <div className="mtm" style={{textAlign: "center"}}>
+        <div className="loader" ></div>
       </div>
     )
 }

@@ -3,6 +3,7 @@ import axios from 'axios'
 import moment from 'moment'
 
 import HistoricalPriceChart from './charts/historicalPriceChart'
+import Loader from '../Loader'
 
 /**
  * historical chart card
@@ -135,7 +136,7 @@ export default class HistoricalPriceCard extends Component {
             {/* stock chart */}
             {!data.dates || !data.prices ? (
               <div>
-                loading...
+                <Loader />
               </div>
             ) : (
               <div className="col-12" style={{padding: "10px 10px 0px 10px"}}>

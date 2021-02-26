@@ -4,11 +4,14 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom'
+import { GoogleAuthProvider } from './components/GoogleAuth';
 
 ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>
-      <App />
+        <GoogleAuthProvider>
+          <App />
+        </GoogleAuthProvider>
     </React.StrictMode>
   </BrowserRouter>,
   document.getElementById('root')
