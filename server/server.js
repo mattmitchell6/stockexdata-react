@@ -7,6 +7,7 @@ const mongoStore = require('connect-mongo')(session);
 
 const stocks = require('./routes/stocks')
 const auth = require('./routes/auth')
+const watchlist = require('./routes/watchlist')
 
 const app = express()
 require('dotenv').config();
@@ -38,6 +39,7 @@ mongoose.connect(process.env.DATABASE_URL, {
 // Routes
 app.use('/api/stocks', stocks)
 app.use('/api/auth', auth)
+app.use('/api/watchlist', watchlist)
 
 // Starting Server
 app.listen(process.env.PORT || 8080, () => {
