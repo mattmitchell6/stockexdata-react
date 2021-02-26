@@ -88,7 +88,9 @@ export default class MainInfoCard extends Component {
               <div>
                 PE Ratio
                 {keyStats.peRatio ? (
-                  <span className="pull-right bold">{keyStats.peRatio}</span>
+                  <span className="pull-right bold">
+                    {numeral(keyStats.peRatio).format('0.00')}
+                  </span>
                 ) : (
                   <span className="pull-right bold">NA</span>
                 )}

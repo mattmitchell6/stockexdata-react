@@ -76,25 +76,29 @@ export default class Search extends Component {
   render() {
     return(
       <div>
-        <form className="mt-4">
-          <div className="input-group mb-3">
-            <input
-              type="text"
-              autoComplete="off"
-              className="form-control"
-              name="symbol"
-              placeholder="BOX, SQ, Apple, ..."
-              onChange={this.filteredResultsHandler}
-            />
-            <div className="input-group-append">
-              <button className="btn btn-blue" type="submit" data-loading="Searching...">Search</button>
-            </div>
+        {!this.state.fuseItems ? (
+          <div>loading...</div>
+        ) : (
+          <form className="mt-4">
+            <div className="input-group mb-3">
+              <input
+                type="text"
+                autoComplete="off"
+                className="form-control"
+                name="symbol"
+                placeholder="BOX, SQ, Apple, ..."
+                onChange={this.filteredResultsHandler}
+              />
+              <div className="input-group-append">
+                <button className="btn btn-blue" type="submit" data-loading="Searching...">Search</button>
+              </div>
 
-            <div className="dropdown-menu col-md-12" style={this.state.quickSearchStyle}>
-              {this.state.quickSearchResults}
+              <div className="dropdown-menu col-md-12" style={this.state.quickSearchStyle}>
+                {this.state.quickSearchResults}
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        )}
       </div>
     )
   }

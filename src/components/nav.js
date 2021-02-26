@@ -2,6 +2,8 @@ import React from 'react';
 import logo from '../logo.png';
 import '../App.css';
 
+import SearchBar from './SearchBar'
+
 /**
  * Navbar component
  */
@@ -25,15 +27,7 @@ function Nav(props) {
 
             {/* TODO: componentize this... */}
             {props.displayNavSearch &&
-              <form action="/search" method="get" className="form-inline" style={{paddingRight: ".8rem"}}>
-                <div className="search">
-                  <span className="fa fa-search form-control-feedback mt-2"></span>
-                  <input type="text" autoComplete="off" className="form-control form-control-sm" id="stockInput" style={{width: "250px"}} name="symbol" placeholder="stock lookup" />
-                  <div className="dropdown-menu col-md-12" id="filteredResultsContainer">
-                    <div id="filteredResults"></div>
-                  </div>
-                </div>
-              </form>
+              <SearchBar type="nav" />
             }
             <ul className="navbar-nav mr-auto">
               <li className="nav-item active">

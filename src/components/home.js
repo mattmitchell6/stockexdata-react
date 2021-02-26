@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Nav from './nav';
 import Search from './homeSearch'
+import SearchBar from './SearchBar'
 
 /**
  * Home page component
@@ -19,7 +20,7 @@ export default class Home extends Component {
 
               <h4 className="text-center white-text">Search by symbol or company name</h4>
 
-              <Search />
+              <SearchBar type="home" />
             </div>
 
             {/* TODO: user watchlist */}
