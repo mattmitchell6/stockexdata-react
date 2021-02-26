@@ -33,6 +33,11 @@ function GoogleAuthProvider({ children }) {
     // if(data.error) throw new Error(data.error)
   }
 
+  const updateUser = async (updatedUser) => {
+    setUser(updatedUser)
+    // if(data.error) throw new Error(data.error)
+  }
+
   const logOut = async () => {
     const res = await axios.delete("/api/auth/logout")
 
@@ -41,7 +46,7 @@ function GoogleAuthProvider({ children }) {
   }
 
   return (
-    <GoogleAuthContext.Provider value={{user, loading, logIn, logOut}}>
+    <GoogleAuthContext.Provider value={{user, loading, logIn, logOut, updateUser}}>
       {children}
     </GoogleAuthContext.Provider>
   )

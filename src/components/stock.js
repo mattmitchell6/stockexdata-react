@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import Nav from './nav'
-import MainInfoCard from './stock/mainInfoCard'
-import BasicInfoCard from './stock/basicInfoCard'
+import MainInfoCard from './stock/MainInfoCard'
+import BasicInfoCard from './stock/BasicInfoCard'
 import HistoricalPriceCard from './stock/historicalPriceCard'
-import EarningsCards from './stock/earningsCards'
+import EarningsCards from './stock/EarningsCards'
 import NewsCards from './stock/newsCards'
 
 /**

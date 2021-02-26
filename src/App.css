@@ -295,6 +295,8 @@ a:hover {
   padding: 3px 6px;*/
   /*font-size: 70%;*/
   font-size: 22px;
+  color: blue;
+  cursor: pointer;
 }
 
 .watchlist-card {
@@ -333,11 +335,20 @@ a:hover .news.text-muted {
   display: inline-block;
   width: 30px;
   height: 30px;
-  border: 3px solid rgba(255,255,255,.3);
   border-radius: 50%;
-  border-top-color: #fff;
+
   animation: spin .6s linear infinite;
   -webkit-animation: spin .6s linear infinite;
+}
+
+.loader.dark {
+  border: 3px solid rgba(51,55,69,.3);
+  border-top-color: #333745;
+}
+
+.loader.light {
+  border: 3px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
 }
 
 @keyframes spin {

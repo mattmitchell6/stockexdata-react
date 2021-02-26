@@ -41,8 +41,8 @@ export default class newsCards extends Component {
             <div>
               {news.map((item) => {
                 return (
-                  <div>
-                    <div key={item.url} className="row mbs">
+                  <div key={item.url}>
+                    <div className="row mbs">
                       <div className="col-md-4">
                         <img className="news-image" src={item.image} alt="" />
                       </div>

@@ -6,7 +6,7 @@ import { UseGoogleAuthContext } from './GoogleAuth';
 import Nav from './nav';
 import SearchBar from './SearchBar'
 import Loader from './Loader';
-import WatchListItems from './WatchlistItems'
+import Watchlist from './Watchlist'
 
 /**
  * Home page component
@@ -20,7 +20,7 @@ function Home() {
     } else if(auth.user) {
       return (
         <div>
-          <WatchListItems />
+          <Watchlist />
         </div>
       )
     } else {
