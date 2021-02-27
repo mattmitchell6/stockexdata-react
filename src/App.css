@@ -1,8 +1,13 @@
 body {
   /* background: #f2f6fa; */
-  background: #333745;
+  /*background: #333745;*/
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
+  /*background: #466368;*/
+  background: linear-gradient(#283c86, #45a247);
+  /*border-radius: 6px;*/
+  height: 350px;
+  background-repeat: no-repeat;
 }
 
 h1, h2, h3, h4, h5 {
@@ -46,7 +51,7 @@ a:hover {
 
 .navbar {
   /* background-color: #403F57 !important; */
-  background-color: #333745 !important;
+  /*background-color: #333745 !important;*/
 }
 
 .white-text {
@@ -190,7 +195,17 @@ a:hover {
   -moz-box-shadow: 0 7px 14px rgba(50, 50, 93, 0.10), 0 3px 6px rgba(0, 0, 0, 0.08);
   box-shadow: 0 7px 14px rgba(50, 50, 93, 0.10), 0 3px 6px rgba(0, 0, 0, 0.08);
   transition: all 300ms ease;
+  border: 2px solid rgba(0,0,0,.125);
+  border-radius: 12px;
 }
+
+.card-header {
+  background: white;
+  /*border-bottom: 2px solid rgba(0,0,0,.125);*/
+  border-bottom: none !important;
+  border-radius: 12px 12px 0 0 !important;
+}
+
 .shadow-lg {
   -webkit-box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
   -moz-box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
@@ -295,8 +310,12 @@ a:hover {
   padding: 3px 6px;*/
   /*font-size: 70%;*/
   font-size: 22px;
-  color: blue;
+  color: #283c86;
   cursor: pointer;
+}
+
+.watchlist-item {
+  border-top: 2px solid rgba(0,0,0,.125);
 }
 
 .watchlist-card {

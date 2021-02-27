@@ -25,7 +25,7 @@ function Home() {
       )
     } else {
       return (
-        <div>
+        <div class="card-body watchlist-item">
           <GoogleLogin
             clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
             buttonText="Login with Google"
@@ -57,36 +57,15 @@ function Home() {
 
           {/* TODO: user watchlist */}
           <div className="col-md-8 mtm">
-            <h5 className="white-text">Watchlist</h5>
-            <hr className="white-background"></hr>
-
-            {renderUserContent()}
-          </div>
-
-
-          {/* <div class="col-md-8 mtm">
-            <h5 class="white-text">Watchlist</h5>
-            <hr class="white-background">
-            {{#if user}}
-              {{#if user.watchlist}}
-                <div id="watchlist-container">
-                  <div id="watchlist-spinner" class="text-center"></div>
-                </div>
-              {{else}}
-              <div class="white-text">
-                Your watchlist is empty. Search for stocks and add them to your watchlist.
+            <div class="card">
+              <div className="card-header">
+                <h5>Watchlist</h5>
               </div>
-              {{/if}}
-            {{else}}
-              <a href="/auth/google" class="btn btn-light btn-sm">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1024px-Google_%22G%22_Logo.svg.png" height="18px" style="margin-right: 3px" alt="">
-                Login with Google
-              </a>
-              <span class="white-text">
-                to create and view your watchlist
-              </span>
-            {{/if}}
-          </div> */}
+              {renderUserContent()}
+            </div>
+            {/* <h5 className="white-text">Watchlist</h5> */}
+            {/* <hr className="white-background"></hr> */}
+          </div>
 
         </div>
       </div>

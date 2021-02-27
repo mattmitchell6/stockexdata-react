@@ -36,7 +36,8 @@ function Nav(props) {
 
   return (
     <div>
-      <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
+      <nav className="navbar navbar-expand-sm">
+        {/* navbar-dark bg-dark */}
 
         <div className="container">
           <div className="navbar-header">

@@ -126,6 +126,7 @@ router.get('/:symbol/earnings', async function(req, res) {
 
   try {
     const earnings = await IEX.getEarnings(req.params.symbol)
+    console.log(earnings);
 
     // populate quarterly income data
     for(let i = 0; i < earnings.earningsData.length; i++) {

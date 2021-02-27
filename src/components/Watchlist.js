@@ -20,7 +20,7 @@ function Watchlist() {
       )
     } else {
       return (
-        <div className="white-text">
+        <div className="card-body watchlist-item">
           Your watchlist is empty. Search for stocks and add them to your watchlist.
         </div>
       )

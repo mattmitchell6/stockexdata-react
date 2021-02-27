@@ -95,15 +95,6 @@ function Quote(props) {
                 <i onClick={addToWatchlist} className="far fa-star"></i>
               </span>
             )}
-            {/* {{#if user}}
-              {{#if_in_list stock.quote.symbol user.watchlist}}
-                <a href="/watchlist/remove/{{stock.quote.symbol}}"><span class="watchlist"><i class="fas fa-star "></i></span></a>
-              {{else}}
-                <a href="/watchlist/add/{{stock.quote.symbol}}"><span class="watchlist"><i class="far fa-star"></i></span></a>
-              {{/if_in_list}}
-            {{else}}
-              <a href="/auth/google"><span class="watchlist"><i class="far fa-star"></i></span></a>
-            {{/if}} */}
           </h4>
           <h3>
             <span className="price" style={{fontWeight: "500"}}>{numeral(quote.latestPrice).format('$0,0.00')}</span>
