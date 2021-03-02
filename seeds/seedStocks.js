@@ -34,8 +34,8 @@ async function seed() {
         companyToAdd.save()
         console.log(companies[i].symbol + " added");
       } else {
-        console.log(companies[i].symbol + " exists");
-        console.log(companies[i].name);
+        // console.log(companies[i].symbol + " exists");
+        // console.log(companies[i].name);
       }
     }
 

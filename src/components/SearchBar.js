@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import Fuse from 'fuse.js';
-import FilteredResult from './filteredResult'
+import FilteredResult from './FilteredResult'
 
 import Loader from "./Loader";
 
@@ -10,9 +11,11 @@ const WAIT_INTERVAL = 150;
 
 function SearchBar(props) {
   const [fuseItems, setFuseItems] = useState(null)
+  const [symbol, setSymbol] = useState("")
   const [quickSearchStyle, setQuickSearchStyle] = useState({display: "none"})
   const [quickSearchResults, setQuickSearchResults] = useState([])
   const [timer, setTimer] = useState(null)
+  let history = useHistory();
 
   useEffect(() => {
     async function fetchAllStocks() {
@@ -37,6 +40,7 @@ function SearchBar(props) {
 
   const filteredResultsHandler = (event) => {
     let timerResult;
+    setSymbol(event.target.value)
     clearTimeout(timer);
 
     // Execute the debounced onChange method
@@ -64,12 +68,18 @@ function SearchBar(props) {
     setQuickSearchResults(updatedQuickSearchResults)
   }
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    history.push(`/${symbol}`)
+  }
+
   const renderContent = () => {
     if(!fuseItems) {
       return <Loader />
     } else if(props.type === "home") {
       return (
-        <form className="mt-4">
+        <form onSubmit={handleSubmit} className="mt-4">
           <div className="input-group mb-3">
             <input
               type="text"
@@ -80,7 +90,7 @@ function SearchBar(props) {
               onChange={filteredResultsHandler}
             />
             <div className="input-group-append">
-              <button className="btn btn-blue" type="submit" data-loading="Searching...">Search</button>
+              <button className="btn btn-blue" type="submit" style={{borderRadius: "0 .25rem .25rem 0"}}>Search</button>
             </div>
 
             <div className="dropdown-menu col-md-12" style={quickSearchStyle}>
@@ -91,7 +101,7 @@ function SearchBar(props) {
       )
     } else if(props.type === "nav") {
       return (
-        <form className="form-inline" style={{paddingRight: ".8rem"}}>
+        <form className="form-inline" onSubmit={(e) => e.preventDefault()} style={{paddingRight: ".8rem"}}>
           <div className="search">
             <span className="fa fa-search form-control-feedback mt-2"></span>
             <input
@@ -110,7 +120,6 @@ function SearchBar(props) {
         </form>
       )
     }
-
   }
 
   return(

@@ -126,7 +126,6 @@ router.get('/:symbol/earnings', async function(req, res) {
 
   try {
     const earnings = await IEX.getEarnings(req.params.symbol)
-    console.log(earnings);
 
     // populate quarterly income data
     for(let i = 0; i < earnings.earningsData.length; i++) {
@@ -157,6 +156,45 @@ router.get('/:symbol/earnings', async function(req, res) {
       earnings: {
         earningsActual: earningsActual,
         earningsEstimate: earningsEstimate
+      }
+    });
+  } catch(e) {
+    console.log(e);
+    res.sendStatus(500)
+  }
+});
+
+/**
+ * get income data
+ */
+router.get('/:symbol/income', async function(req, res) {
+  let fiscalPeriods = {quarterly: [], annual: []},
+    totalRevenueData = {quarterly: [], annual: []},
+    netIncomeData = {quarterly: [], annual: []};
+
+  try {
+    const income = await IEX.getIncome(req.params.symbol);
+
+    // populate quarterly income data
+    for(let i = 0; i < income.quarterlyIncomeData.length; i++) {
+      fiscalPeriods.quarterly.push(
+        `Q${income.quarterlyIncomeData[i].fiscalQuarter} ${income.quarterlyIncomeData[i].fiscalYear}`);
+      totalRevenueData.quarterly.push(income.quarterlyIncomeData[i].totalRevenue);
+      netIncomeData.quarterly.push(income.quarterlyIncomeData[i].netIncome);
+    }
+
+    // populate annual income data
+    for(i = 0; i < income.annualIncomeData.length; i++) {
+      fiscalPeriods.annual.push(income.annualIncomeData[i].fiscalDate);
+      totalRevenueData.annual.push(income.annualIncomeData[i].totalRevenue);
+      netIncomeData.annual.push(income.annualIncomeData[i].netIncome);
+    }
+
+    res.send({
+      fiscalPeriods: fiscalPeriods,
+      income: {
+        totalRevenueData: totalRevenueData,
+        netIncomeData: netIncomeData
       }
     });
   } catch(e) {

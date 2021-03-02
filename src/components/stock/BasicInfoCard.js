@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
+import numeral from 'numeral'
 
 /**
  * basic info card
@@ -17,7 +18,9 @@ function BasicInfoCard(props) {
       }
     }
 
-    fetchBasicInfo()
+    if(!basicInfo) {
+      fetchBasicInfo()
+    }
   }, [basicInfo, props])
 
   const toggleReadMore = (e) => {
@@ -29,75 +32,112 @@ function BasicInfoCard(props) {
 
   return (
     <div>
-      {basicInfo && basicInfo.description &&
+      {basicInfo && basicInfo.issueType === "cs" && (
         <div className="card card-body mb20">
           <div className="row">
             <div className="col-12">
               <h5 className="mbm">About {basicInfo.companyName}</h5>
-              {!readMore ? (
+              {basicInfo.description && (
                 <div>
-                  <div>{basicInfo.description.substr(0, 200) + "... "}</div>
-                  <a href="#" onClick={toggleReadMore}>Read More</a>
-                </div>
-              ) : (
-                <div>
-                  <div>{basicInfo.description}</div>
-                  <a href="#" onClick={toggleReadMore}>Read Less</a>
+                  {!readMore ? (
+                    <div>
+                      <div>{basicInfo.description.substr(0, 200) + "... "}</div>
+                      <span className="readmore" onClick={toggleReadMore}>Read More</span>
+                    </div>
+                  ) : (
+                    <div>
+                      <div>{basicInfo.description}</div>
+                      <span className="readmore" onClick={toggleReadMore}>Read Less</span>
+                    </div>
+                  )}
                 </div>
               )}
               <hr/>
 
-              <div className="row">
-                <div className="col-4">
-                  Website
-                </div>
-                <div className="col-8 overflow">
-                  <div className="pull-right">
-                    <a href={basicInfo.website}>{basicInfo.website}</a>
+              {basicInfo.website && (
+                <div>
+                  <div className="row">
+                    <div className="col-4">
+                      Website
+                    </div>
+                    <div className="col-8 overflow">
+                      <div className="pull-right">
+                        <a href={basicInfo.website}>{basicInfo.website}</a>
+                      </div>
+                    </div>
                   </div>
+                  <hr/>
                 </div>
-              </div>
-              <hr/>
+              )}
 
-              <div className="row">
-                <div className="col-4">
-                  CEO
-                </div>
-                <div className="col-8 overflow">
-                  <div className="pull-right">
-                    <span className="bold">{basicInfo.CEO}</span>
+              {basicInfo.website && (
+                <div>
+                  <div className="row">
+                    <div className="col-4">
+                      CEO
+                    </div>
+                    <div className="col-8 overflow">
+                      <div className="pull-right">
+                        <span className="bold">{basicInfo.CEO}</span>
+                      </div>
+                    </div>
                   </div>
+                  <hr/>
                 </div>
-              </div>
-              <hr/>
+              )}
 
-              <div className="row">
-                <div className="col-4">
-                  HQ
-                </div>
-                <div className="col-8 overflow">
-                  <div className="pull-right">
-                    <span className="bold">{basicInfo.city}, {basicInfo.state}</span>
+              {basicInfo.city && basicInfo.state && (
+                <div>
+                  <div className="row">
+                    <div className="col-4">
+                      HQ
+                    </div>
+                    <div className="col-8 overflow">
+                      <div className="pull-right">
+                        <span className="bold">{basicInfo.city}, {basicInfo.state}</span>
+                      </div>
+                    </div>
                   </div>
+                  <hr/>
                 </div>
-              </div>
-              <hr/>
+              )}
 
-              <div className="row">
-                <div className="col-4">
-                  Sector
-                </div>
-                <div className="col-8 overflow">
-                  <div className="pull-right">
-                    <span className="bold">{basicInfo.sector}</span>
+              {basicInfo.sector && (
+                <div>
+                  <div className="row">
+                    <div className="col-4">
+                      Sector
+                    </div>
+                    <div className="col-8 overflow">
+                      <div className="pull-right">
+                        <span className="bold">{basicInfo.sector}</span>
+                      </div>
+                    </div>
                   </div>
+                  <hr/>
                 </div>
-              </div>
-              <hr/>
+              )}
+
+              {basicInfo.employees && (
+                <div>
+                  <div className="row">
+                    <div className="col-4">
+                      Employees
+                    </div>
+                    <div className="col-8 overflow">
+                      <span className="pull-right bold employees">
+                        {numeral(basicInfo.employees).format('0,0')}
+                      </span>
+                    </div>
+                  </div>
+                  <hr/>
+                </div>
+              )}
+
             </div>
           </div>
         </div>
-      }
+      )}
     </div>
   )
 }

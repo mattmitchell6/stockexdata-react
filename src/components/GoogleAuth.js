@@ -39,7 +39,7 @@ function GoogleAuthProvider({ children }) {
   }
 
   const logOut = async () => {
-    const res = await axios.delete("/api/auth/logout")
+    await axios.delete("/api/auth/logout")
 
     setUser(null)
     // if(data.error) throw new Error(data.error)

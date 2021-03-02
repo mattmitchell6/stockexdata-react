@@ -24,7 +24,9 @@ function MainInfoCard(props) {
       setLoading(false)
     }
 
-    fetchKeyStats();
+    if(!keyStats) {
+      fetchKeyStats();
+    }
   }, [logo, keyStats, props])
 
   const percentageClass = (change) => {
@@ -131,10 +133,10 @@ function MainInfoCard(props) {
 
           <div className="col-lg-4 col-md-6 col-sm-12 col-xs-12">
             <div>
-              Employees
-              {keyStats.employees ? (
-                <span className="pull-right bold employees">
-                  {numeral(keyStats.employees).format('0,0')}
+              YTD Price Change
+              {keyStats.ytdChangePercent ? (
+                <span className={`pull-right bold ${percentageClass(keyStats.ytdChangePercent)}`}>
+                  {numeral(keyStats.ytdChangePercent).format('+0.00%')}
                 </span>
               ) : (
                 <span className="pull-right bold">NA</span>
@@ -155,10 +157,10 @@ function MainInfoCard(props) {
             <hr/>
 
             <div>
-              YTD Price Change
-              {keyStats.ytdChangePercent ? (
-                <span className={`pull-right bold ${percentageClass(keyStats.ytdChangePercent)}`}>
-                  {numeral(keyStats.ytdChangePercent).format('+0.00%')}
+              Revenue Multiple
+              {keyStats.priceToSales ? (
+                <span className="pull-right bold">
+                  {numeral(keyStats.priceToSales).format('0.00')}
                 </span>
               ) : (
                 <span className="pull-right bold">NA</span>

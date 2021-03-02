@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import Nav from './nav'
+import Nav from './Nav'
 import MainInfoCard from './stock/MainInfoCard'
 import BasicInfoCard from './stock/BasicInfoCard'
-import HistoricalPriceCard from './stock/historicalPriceCard'
-import EarningsCards from './stock/EarningsCards'
-import NewsCards from './stock/newsCards'
+import HistoricalPriceCard from './stock/HistoricalPriceCard'
+import IncomeCard from './stock/IncomeCard'
+import NewsCards from './stock/NewsCard'
 
 /**
  * stock page
@@ -30,7 +30,7 @@ export default class Stock extends Component {
                   <div className="col-lg-4 col-md-12">
                     <BasicInfoCard symbol={params.symbol} />
 
-                    <EarningsCards symbol={params.symbol} />
+                    <IncomeCard symbol={params.symbol} />
                   </div>
 
                   <div className="col-lg-8 col-md-12">

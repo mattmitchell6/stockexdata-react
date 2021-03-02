@@ -25,8 +25,10 @@ function Quote(props) {
       setQuote(res.data)
     }
 
-    fetchQuote();
-  }, [quote])
+    if(!quote) {
+      fetchQuote();
+    }
+  }, [quote, props])
 
   const onSuccess = async (res) => {
     await auth.logIn(res);
@@ -79,7 +81,6 @@ function Quote(props) {
   }
 
   const renderContent = () => {
-    let html;
 
     if(quote) {
       return (
@@ -88,11 +89,11 @@ function Quote(props) {
             {quote.companyName} <span className="text-muted">({quote.symbol})</span>
             {(auth.user && inWatchlist()) ? (
               <span className="watchlist">
-                <i onClick={removeFromWatchlist} className="fas fa-star"></i>
+                &nbsp;<i onClick={removeFromWatchlist} className="fas fa-star"></i>
               </span>
             ) : (
               <span className="watchlist">
-                <i onClick={addToWatchlist} className="far fa-star"></i>
+                &nbsp;<i onClick={addToWatchlist} className="far fa-star"></i>
               </span>
             )}
           </h4>

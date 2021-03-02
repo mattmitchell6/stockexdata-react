@@ -8,7 +8,6 @@ let userSchema = new Schema({
   watchlist: [String]
 });
 
-// userSchema.plugin(PassportLocalMongoose);
 userSchema.plugin(findOrCreate);
 
 var User = mongoose.model('User', userSchema);

@@ -376,3 +376,12 @@ a:hover .news.text-muted {
 @-webkit-keyframes spin {
   to { -webkit-transform: rotate(360deg); }
 }
+
+.readmore {
+  cursor: pointer;
+  color: #007bff;
+}
+
+.readmore:hover {
+  color: #0056B3
+}

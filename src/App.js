@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom'
-import Home from './components/home'
-import Stock from './components/stock'
+import Home from './components/Home'
+import Stock from './components/Stock'
 import './App.css';
 
 function App() {

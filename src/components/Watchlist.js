@@ -1,12 +1,10 @@
-import React, { useState } from "react";
-import axios from 'axios';
+import React from "react";
 
 import { UseGoogleAuthContext } from './GoogleAuth';
-import Loader from './Loader';
 import WatchlistItem from './WatchlistItem'
 
 /**
- * Home page component
+ * Watchlist
  */
 function Watchlist() {
   const auth = UseGoogleAuthContext()

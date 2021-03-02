@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import axios from 'axios';
+import React from "react";
 import GoogleLogin from 'react-google-login';
 
 import { UseGoogleAuthContext } from './GoogleAuth';
-import Nav from './nav';
+import Nav from './Nav';
 import SearchBar from './SearchBar'
 import Loader from './Loader';
 import Watchlist from './Watchlist'
@@ -57,7 +56,7 @@ function Home() {
 
           {/* TODO: user watchlist */}
           <div className="col-md-8 mtm">
-            <div class="card">
+            <div class="card mbm">
               <div className="card-header">
                 <h5>Watchlist</h5>
               </div>
