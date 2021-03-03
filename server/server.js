@@ -12,7 +12,13 @@ const watchlist = require('./routes/watchlist')
 const app = express()
 require('dotenv').config();
 
-// const user = require('./routes/user')
+// app.use(cors());
+app.use(express.static(path.join(__dirname, '..', 'build')));
+
+
+app.get('/:symbol', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
+});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -40,6 +46,7 @@ mongoose.connect(process.env.DATABASE_URL, {
 app.use('/api/stocks', stocks)
 app.use('/api/auth', auth)
 app.use('/api/watchlist', watchlist)
+
 
 // Starting Server
 app.listen(process.env.PORT || 8080, () => {

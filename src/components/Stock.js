@@ -1,4 +1,6 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
 import Nav from './Nav'
 import MainInfoCard from './stock/MainInfoCard'
 import BasicInfoCard from './stock/BasicInfoCard'
@@ -9,17 +11,30 @@ import NewsCards from './stock/NewsCard'
 /**
  * stock page
  */
-export default class Stock extends Component {
+function Stock(props) {
+  const [stockExists, setStockExists] = useState("pending")
+  const { match: { params } } = props;
 
-  render() {
-    const { match: { params } } = this.props;
+  useEffect(() => {
+    async function fetchAllStocks() {
+      let res;
+      res = await axios.get('/api/stocks/fetchall')
 
+      setStockExists(res.data.some((item) => item.symbol === params.symbol))
+    }
 
-    return (
-      <div>
-        <Nav displayNavSearch={true} />
-        <div className="container mtm">
-          <div className="row d-flex justify-content-center">
+    if(stockExists === "pending") {
+      fetchAllStocks();
+    }
+  }, [stockExists, params])
+
+  return (
+    <div>
+      <Nav displayNavSearch={true} />
+      <div className="container mtm">
+        <div className="row d-flex justify-content-center">
+
+          {stockExists ? (
             <div className="tab-content col-md-12">
               <div className="tab-pane show active" id="login" role="tabpanel" aria-labelledby="login">
 
@@ -42,9 +57,16 @@ export default class Stock extends Component {
 
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="alert alert-danger mbm col-8 text-center" role="alert">
+              Could not find symbol for "{params.symbol}"
+
+            </div>
+          )}
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 }
+
+export default Stock

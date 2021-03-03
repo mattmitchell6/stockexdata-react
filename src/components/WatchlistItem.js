@@ -15,7 +15,6 @@ function WatchlistItem(props) {
       let res = await axios.get(`/api/stocks/${props.symbol}/quote`)
       const resInfo = await axios.get(`/api/stocks/${props.symbol}/basicinfo`);
       res.data.logo = resInfo.data.logo
-      console.log(res.data);
 
       setQuote(res.data)
     }
@@ -47,18 +46,18 @@ function WatchlistItem(props) {
   }
 
   return (
-    <div key={props.symbol} class="card-body watchlist-item">
+    <div key={props.symbol} className="card-body watchlist-item">
       {quote ? (
-        <div class="row" style={{fontSize: "90%"}}>
-          <div class="col-2">
+        <div className="row" style={{fontSize: "90%"}}>
+          <div className="col-2">
             <img src={quote.logo} height="30px" alt="" className="logo" />
           </div>
-          <div class="col-5 overflow">
+          <div className="col-5 overflow">
             <a href={`/${props.symbol}`}><h5>{props.symbol}</h5></a>
             <span>{quote.companyName}</span>
           </div>
-          <div class="col-5">
-            <div class="price pull-right">
+          <div className="col-5">
+            <div className="price pull-right">
               {numeral(quote.latestPrice).format('$0,0.00')}
             </div>
             <br></br>

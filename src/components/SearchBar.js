@@ -15,6 +15,7 @@ function SearchBar(props) {
   const [quickSearchStyle, setQuickSearchStyle] = useState({display: "none"})
   const [quickSearchResults, setQuickSearchResults] = useState([])
   const [timer, setTimer] = useState(null)
+  const [error, setError] = useState(null)
   let history = useHistory();
 
   useEffect(() => {
@@ -71,7 +72,11 @@ function SearchBar(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    history.push(`/${symbol}`)
+    if(fuseItems._docs.some((item) => item.symbol === symbol)) {
+      history.push(`/${symbol}`)
+    } else {
+      setError(`Could not find symbol "${symbol}"`)
+    }
   }
 
   const renderContent = () => {
@@ -79,25 +84,36 @@ function SearchBar(props) {
       return <Loader />
     } else if(props.type === "home") {
       return (
-        <form onSubmit={handleSubmit} className="mt-4">
-          <div className="input-group mb-3">
-            <input
-              type="text"
-              autoComplete="off"
-              className="form-control"
-              name="symbol"
-              placeholder="BOX, SQ, Apple, ..."
-              onChange={filteredResultsHandler}
-            />
-            <div className="input-group-append">
-              <button className="btn btn-blue" type="submit" style={{borderRadius: "0 .25rem .25rem 0"}}>Search</button>
+        <div>
+          {error && (
+            <div className="alert alert-danger mbs mts" role="alert">
+              {error}
+              <button type="button" className="close mls" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
+          )}
 
-            <div className="dropdown-menu col-md-12" style={quickSearchStyle}>
-              {quickSearchResults}
+          <form onSubmit={handleSubmit} className="mt-4">
+            <div className="input-group mb-3">
+              <input
+                type="text"
+                autoComplete="off"
+                className="form-control"
+                name="symbol"
+                placeholder="BOX, SQ, Apple, ..."
+                onChange={filteredResultsHandler}
+              />
+              <div className="input-group-append">
+                <button className="btn btn-blue" type="submit" style={{borderRadius: "0 .25rem .25rem 0"}}>Search</button>
+              </div>
+
+              <div className="dropdown-menu col-md-12" style={quickSearchStyle}>
+                {quickSearchResults}
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       )
     } else if(props.type === "nav") {
       return (

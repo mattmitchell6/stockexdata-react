@@ -13,6 +13,10 @@ import { UseGoogleAuthContext } from './GoogleAuth';
 function Nav(props) {
   const auth = UseGoogleAuthContext()
 
+  const handleAuthFailure = () => {
+    console.log("failed google login");
+  }
+
   const renderUserContent = () => {
     if(auth.loading) {
       return <Loader />
@@ -26,7 +30,7 @@ function Nav(props) {
           clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
           buttonText="Login"
           onSuccess={auth.logIn}
-          onFailure={null}
+          onFailure={handleAuthFailure}
           cookiePolicy={'single_host_origin'}
           style={{fontSize: "8px"}}
         />

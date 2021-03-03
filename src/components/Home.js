@@ -10,8 +10,13 @@ import Watchlist from './Watchlist'
 /**
  * Home page component
  */
-function Home() {
+function Home(props) {
   const auth = UseGoogleAuthContext()
+
+  const handleAuthFailure = (event) => {
+    console.log("failed google login");
+    console.log(event);
+  }
 
   const renderUserContent = () => {
     if(auth.loading) {
@@ -24,12 +29,12 @@ function Home() {
       )
     } else {
       return (
-        <div class="card-body watchlist-item">
+        <div className="card-body watchlist-item">
           <GoogleLogin
             clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
             buttonText="Login with Google"
             onSuccess={auth.logIn}
-            onFailure={null}
+            onFailure={handleAuthFailure}
             cookiePolicy={'single_host_origin'}
           />
           <span className="white-text">
@@ -47,8 +52,6 @@ function Home() {
         <div className="row d-flex justify-content-center">
 
           <div className="col-md-6">
-            {/* TODO: flash messages */}
-
             <h4 className="text-center white-text">Search by symbol or company name</h4>
 
             <SearchBar type="home" />
@@ -56,7 +59,7 @@ function Home() {
 
           {/* TODO: user watchlist */}
           <div className="col-md-8 mtm">
-            <div class="card mbm">
+            <div className="card mbm">
               <div className="card-header">
                 <h5>Watchlist</h5>
               </div>
