@@ -25,7 +25,7 @@ async function seed() {
 
     for(let i=0; i < companies.length; i++) {
       entry = await Company.findOne({'symbol': companies[i].symbol});
-      if(!entry) {
+      if(!entry && (companies[i].type === "cs" || companies[i].type === "et")) {
         // add new company to db
         companyToAdd = new Company({
           symbol: companies[i].symbol,
