@@ -22,8 +22,19 @@ router.get('/', async function(req, res) {
  * get all available stocks for filtering
  */
 router.get('/fetchall', async function(req, res) {
-  const allStocks = await Company.find({})
-  res.send(allStocks);
+  req.redis.get("allstocks", async (err, allStocks) => {
+    if (err) throw err;
+
+    if (allStocks) {
+      console.log('hit');
+      res.send(JSON.parse(allStocks));
+    } else {
+      console.log("miss");
+      const allStocks = await Company.find({})
+      req.redis.set("allstocks", JSON.stringify(allStocks));
+      res.send(allStocks);
+    }
+  })
 });
 
 /**

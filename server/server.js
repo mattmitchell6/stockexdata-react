@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 const path = require('path');
 const session = require('express-session');
 const mongoStore = require('connect-mongo')(session);
+const redis = require('redis')
+
+const client = redis.createClient(process.env.REDIS_URL);
 
 const stocks = require('./routes/stocks')
 const auth = require('./routes/auth')
@@ -15,6 +18,11 @@ require('dotenv').config();
 // app.use(cors());
 app.use(express.static(path.join(__dirname, '..', 'build')));
 
+
+app.use(function(req, res, next) {
+  req.redis = client;
+  next();
+});
 
 app.get('/:symbol', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
