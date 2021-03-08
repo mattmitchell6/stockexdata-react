@@ -59,7 +59,7 @@ class IEX {
     let basicInfo = await BasicInfo.findOne({'symbol': symbol.toUpperCase()});
 
     // update or create
-    if(!basicInfo || moment().diff(basicInfo.lastUpdated, 'months') > 1) {
+    if(!basicInfo || moment().diff(basicInfo.lastUpdated, 'days') > 10) {
       let logoResult = await axios.get(logoUrl);
 
       let basicInfoResult = await axios.get(companyInfoUrl);
@@ -231,60 +231,6 @@ class IEX {
        annualIncomeData: JSON.parse(income.annualIncomeData)
      }
    }
-
-    /**
-     * get earnings data
-     */
-  //   static async getEarnings(symbol) {
-  //     let quarterlyIncomeResult, annualIncomeResult, earningsResult, lastReported;
-  //     const quarterlyIncomeUrl = `${baseUrl}/${symbol}/income?last=4&period=quarter&${token}`;
-  //     const annualIncomeUrl = `${baseUrl}/${symbol}/income?last=4&period=annual&${token}`;
-  //     const earningsUrl = `${baseUrl}/${symbol}/earnings?last=4&${token}`;
-   //
-  //     let earnings = await Earnings.findOne({'symbol': symbol.toUpperCase()});
-  //     let keyStats = await this.getKeyStats(symbol);
-   //
-  //     if(!earnings || !keyStats || moment(keyStats.nextEarningsDate).diff(earnings.lastReported, 'days') > 150) {
-   //
-  //       // make calls to fetch last 4 four quarters of income / earnings statements
-  //       [quarterlyIncomeResult, annualIncomeResult, earningsResult] = await Promise.all([
-  //         axios.get(quarterlyIncomeUrl),
-  //         axios.get(annualIncomeUrl),
-  //         axios.get(earningsUrl)
-  //       ])
-   //
-  //       if(!isEmpty(earningsResult.data) && !isEmpty(quarterlyIncomeResult.data) && !isEmpty(annualIncomeResult.data)) {
-  //         quarterlyIncomeResult = JSON.stringify(quarterlyIncomeResult.data.income.reverse());
-  //         annualIncomeResult = JSON.stringify(annualIncomeResult.data.income.reverse());
-   //
-  //         earningsResult = earningsResult.data.earnings.reverse();
-  //         lastReported = earningsResult[earningsResult.length - 1].EPSReportDate
-  //         earningsResult = JSON.stringify(earningsResult)
-  //       } else {
-  //         quarterlyIncomeResult = null;
-  //         annualIncomeResult = null;
-  //         earningsResult = null;
-  //         lastReported = moment();
-  //       }
-   //
-  //       earnings = await Earnings.findOneAndUpdate(
-  //         { 'symbol': symbol.toUpperCase() },
-  //         {
-  //           symbol: symbol.toUpperCase(),
-  //           quarterlyIncomeData: quarterlyIncomeResult,
-  //           annualIncomeData: annualIncomeResult,
-  //           earningsData: earningsResult,
-  //           lastReported: lastReported
-  //         },
-  //         { upsert: true, new: true});
-  //    }
-   //
-  //    return {
-  //      earningsData: JSON.parse(earnings.earningsData),
-  //      quarterlyIncomeData: JSON.parse(earnings.quarterlyIncomeData),
-  //      annualIncomeData: JSON.parse(earnings.annualIncomeData)
-  //    }
-  //  }
 
    /**
     * get news

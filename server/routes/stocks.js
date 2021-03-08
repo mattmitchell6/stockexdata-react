@@ -9,7 +9,7 @@ const moment = require('moment');
 const Company = require('../models/companies');
 const IEX = require('../service/iex/iex');
 // const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn('/');
-
+const SECONDS_IN_DAY = 86400
 
 /**
  *  test route
@@ -54,9 +54,22 @@ router.get('/:symbol/quote', async function(req, res) {
  * get basic stock info
  */
 router.get('/:symbol/basicinfo', async function(req, res) {
+  const symbol = req.params.symbol
+  let basicInfo
+
   try {
-    const basicInfo = await IEX.getBasicInfo(req.params.symbol)
-    res.send(basicInfo);
+    req.redis.get(`basicinfo-${symbol}`, async (err, basicInfoCache) => {
+      if (err) throw err;
+
+      if (basicInfoCache) {
+        basicInfo = JSON.parse(basicInfoCache)
+      } else {
+        basicInfo = await IEX.getBasicInfo(symbol)
+        req.redis.setex(`basicinfo-${symbol}`, SECONDS_IN_DAY, JSON.stringify(basicInfo));
+      }
+
+      res.send(basicInfo);
+    });
   } catch(e) {
     console.log(e);
     res.sendStatus(500)
@@ -126,56 +139,6 @@ router.get('/:symbol/historicalprices', async function(req, res) {
 });
 
 /**
- * get earnings data
- */
-router.get('/:symbol/earnings', async function(req, res) {
-  let fiscalPeriods = {quarterly: [], annual: []},
-    totalRevenueData = {quarterly: [], annual: []},
-    netIncomeData = {quarterly: [], annual: []},
-    earningsActual = [],
-    earningsEstimate = [];
-
-  try {
-    const earnings = await IEX.getEarnings(req.params.symbol)
-
-    // populate quarterly income data
-    for(let i = 0; i < earnings.earningsData.length; i++) {
-      fiscalPeriods.quarterly.push(earnings.earningsData[i].fiscalPeriod);
-      totalRevenueData.quarterly.push(earnings.quarterlyIncomeData[i].totalRevenue);
-      netIncomeData.quarterly.push(earnings.quarterlyIncomeData[i].netIncome);
-    }
-
-    // populate annual income data
-    for(i = 0; i < earnings.annualIncomeData.length; i++) {
-      fiscalPeriods.annual.push(earnings.annualIncomeData[i].reportDate);
-      totalRevenueData.annual.push(earnings.annualIncomeData[i].totalRevenue);
-      netIncomeData.annual.push(earnings.annualIncomeData[i].netIncome);
-    }
-
-    // populate quarterly EPS data
-    for(i = 0; i < earnings.earningsData.length; i++) {
-      earningsActual.push(earnings.earningsData[i].actualEPS);
-      earningsEstimate.push(earnings.earningsData[i].consensusEPS);
-    }
-
-    res.send({
-      fiscalPeriods: fiscalPeriods,
-      income: {
-        totalRevenueData: totalRevenueData,
-        netIncomeData: netIncomeData
-      },
-      earnings: {
-        earningsActual: earningsActual,
-        earningsEstimate: earningsEstimate
-      }
-    });
-  } catch(e) {
-    console.log(e);
-    res.sendStatus(500)
-  }
-});
-
-/**
  * get income data
  */
 router.get('/:symbol/income', async function(req, res) {
@@ -213,5 +176,56 @@ router.get('/:symbol/income', async function(req, res) {
     res.sendStatus(500)
   }
 });
+
+
+/**
+ * get earnings data
+ */
+// router.get('/:symbol/earnings', async function(req, res) {
+//   let fiscalPeriods = {quarterly: [], annual: []},
+//     totalRevenueData = {quarterly: [], annual: []},
+//     netIncomeData = {quarterly: [], annual: []},
+//     earningsActual = [],
+//     earningsEstimate = [];
+//
+//   try {
+//     const earnings = await IEX.getEarnings(req.params.symbol)
+//
+//     // populate quarterly income data
+//     for(let i = 0; i < earnings.earningsData.length; i++) {
+//       fiscalPeriods.quarterly.push(earnings.earningsData[i].fiscalPeriod);
+//       totalRevenueData.quarterly.push(earnings.quarterlyIncomeData[i].totalRevenue);
+//       netIncomeData.quarterly.push(earnings.quarterlyIncomeData[i].netIncome);
+//     }
+//
+//     // populate annual income data
+//     for(i = 0; i < earnings.annualIncomeData.length; i++) {
+//       fiscalPeriods.annual.push(earnings.annualIncomeData[i].reportDate);
+//       totalRevenueData.annual.push(earnings.annualIncomeData[i].totalRevenue);
+//       netIncomeData.annual.push(earnings.annualIncomeData[i].netIncome);
+//     }
+//
+//     // populate quarterly EPS data
+//     for(i = 0; i < earnings.earningsData.length; i++) {
+//       earningsActual.push(earnings.earningsData[i].actualEPS);
+//       earningsEstimate.push(earnings.earningsData[i].consensusEPS);
+//     }
+//
+//     res.send({
+//       fiscalPeriods: fiscalPeriods,
+//       income: {
+//         totalRevenueData: totalRevenueData,
+//         netIncomeData: netIncomeData
+//       },
+//       earnings: {
+//         earningsActual: earningsActual,
+//         earningsEstimate: earningsEstimate
+//       }
+//     });
+//   } catch(e) {
+//     console.log(e);
+//     res.sendStatus(500)
+//   }
+// });
 
 module.exports = router;

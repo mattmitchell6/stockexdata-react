@@ -20,8 +20,9 @@ function Quote(props) {
   useEffect(() => {
     async function fetchQuote() {
       const res = await axios.get(`/api/stocks/${props.symbol}/quote`)
+      const resInfo = await axios.get(`/api/stocks/${props.symbol}/basicinfo`);
 
-      setQuote(res.data)
+      setQuote({...res.data, ...resInfo.data})
     }
 
     if(!quote) {

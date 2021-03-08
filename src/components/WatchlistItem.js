@@ -14,9 +14,8 @@ function WatchlistItem(props) {
     async function fetchQuote() {
       let res = await axios.get(`/api/stocks/${props.symbol}/quote`)
       const resInfo = await axios.get(`/api/stocks/${props.symbol}/basicinfo`);
-      res.data.logo = resInfo.data.logo
 
-      setQuote(res.data)
+      setQuote({...res.data, ...resInfo.data})
     }
 
     if(!quote) {
