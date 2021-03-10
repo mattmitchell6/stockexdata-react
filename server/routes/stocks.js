@@ -4,19 +4,16 @@
 const router = require('express').Router();
 const moment = require('moment');
 
-// const Stock = require('../models/stocks');
-// const User = require('../models/users');
 const Company = require('../models/companies');
 const IEX = require('../service/iex/iex');
-// const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn('/');
 const SECONDS_IN_DAY = 86400
 
 /**
  *  test route
  */
-router.get('/', async function(req, res) {
-  res.send(200);
-});
+// router.get('/', async function(req, res) {
+//   res.send(200);
+// });
 
 /**
  * get all available stocks for filtering
@@ -26,13 +23,11 @@ router.get('/fetchall', async function(req, res) {
     if (err) throw err;
 
     if (allStocks) {
-      console.log('hit');
       res.send(JSON.parse(allStocks));
     } else {
-      console.log("miss");
-      const allStocks = await Company.find({})
-      req.redis.set("allstocks", JSON.stringify(allStocks));
-      res.send(allStocks);
+      const foundAllStocks = await Company.find({})
+      req.redis.set("allstocks", JSON.stringify(foundAllStocks));
+      res.send(foundAllStocks);
     }
   })
 });

@@ -18,7 +18,6 @@ require('dotenv').config();
 // app.use(cors());
 app.use(express.static(path.join(__dirname, '..', 'build')));
 
-
 app.use(function(req, res, next) {
   req.redis = client;
   next();

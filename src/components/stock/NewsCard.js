@@ -9,6 +9,7 @@ import Loader from '../Loader'
  */
 function NewsCard(props) {
   const [news, setNews] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchNews() {
@@ -16,25 +17,24 @@ function NewsCard(props) {
 
       if(res.data && res.data.news) {
         setNews(res.data.news)
+        setLoading(false)
       }
     }
 
-    if(!news) {
+    if(loading) {
       fetchNews()
     }
   }, [news, props])
 
-  return (
-    <div className="card mb20">
-      <div className="card-body">
-        <h5 className="mb20">News</h5>
-
-        {!news ? (
-          <div>
-            <Loader theme="dark"/>
-          </div>
-        ) : (
-          <div>
+  const renderContent = () => {
+    if(loading) {
+      return <Loader theme="dark"/>
+    } else if(news && news.length > 0) {
+      return (
+        <div className="card mb20">
+          <div className="card-body">
+            <h5 className="mb20">News</h5>
+            <hr/>
             {news.map((item) => {
               return (
                 <div key={item.url}>
@@ -59,8 +59,14 @@ function NewsCard(props) {
               )
             })}
           </div>
-        )}
-      </div>
+        </div>
+      )
+    }
+  }
+
+  return (
+    <div>
+      {renderContent()}
     </div>
   )
 }

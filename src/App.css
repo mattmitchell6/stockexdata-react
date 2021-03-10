@@ -1,11 +1,7 @@
 body {
-  /* background: #f2f6fa; */
-  /*background: #333745;*/
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
-  /*background: #466368;*/
   background: linear-gradient(#283c86, #45a247);
-  /*border-radius: 6px;*/
   height: 350px;
   background-repeat: no-repeat;
 }

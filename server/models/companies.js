@@ -7,7 +7,8 @@ const Schema = mongoose.Schema;
 
 let companiesSchema = new Schema({
   symbol: String,
-  companyName: String
+  companyName: String,
+  stockType: String
 });
 
 // companiesSchema.index({symbol: "text", companyName: "text"});

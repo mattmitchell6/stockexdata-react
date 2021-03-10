@@ -16,26 +16,23 @@ seed();
 async function seed() {
   try {
     let companies = await IEX.getAllStocks();
-    let companyToAdd;
-    let entry;
+    let addedCompany;
+    // let entry;
 
-    // let result = await Company.fuzzySearch('box').limit(10);
-    // console.log("search res:");
-    // console.log(result);
+    for(let i = 0; i < companies.length; i++) {
+      // entry = await Company.findOne({'symbol': companies[i].symbol});
 
-    for(let i=0; i < companies.length; i++) {
-      entry = await Company.findOne({'symbol': companies[i].symbol});
-      if(!entry && (companies[i].type === "cs" || companies[i].type === "et")) {
-        // add new company to db
-        companyToAdd = new Company({
-          symbol: companies[i].symbol,
-          companyName: companies[i].name
-        });
-        companyToAdd.save()
-        console.log(companies[i].symbol + " added");
-      } else {
-        // console.log(companies[i].symbol + " exists");
-        // console.log(companies[i].name);
+      // only add ETFs and Common Stocks to list
+      if(companies[i].type === "cs" || companies[i].type === "et") {
+        addedCompany = await Company.findOneAndUpdate(
+          { 'symbol': companies[i].symbol.toUpperCase() },
+          {
+            symbol: companies[i].symbol.toUpperCase(),
+            companyName: companies[i].name,
+            stockType: companies[i].type
+          },
+          { upsert: true, new: true});
+        console.log(addedCompany.symbol + " added");
       }
     }
 
