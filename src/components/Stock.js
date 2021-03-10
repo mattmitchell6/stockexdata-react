@@ -21,11 +21,12 @@ function Stock(props) {
   useEffect(() => {
     async function fetchAllStocks() {
       let res;
+      const symbol = params.symbol.toUpperCase()
       res = await axios.get('/api/stocks/fetchall')
-      const foundStock = res.data.find((item) => item.symbol === params.symbol)
+      const foundStock = res.data.find((item) => item.symbol === symbol)
 
       setStock(foundStock)
-      setStockExists(res.data.some((item) => item.symbol === params.symbol))
+      setStockExists(res.data.some((item) => item.symbol === symbol))
       if(foundStock && foundStock.stockType !== "cs") {
         setCardClass("")
       }

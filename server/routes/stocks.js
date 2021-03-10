@@ -9,13 +9,6 @@ const IEX = require('../service/iex/iex');
 const SECONDS_IN_DAY = 86400
 
 /**
- *  test route
- */
-// router.get('/', async function(req, res) {
-//   res.send(200);
-// });
-
-/**
  * get all available stocks for filtering
  */
 router.get('/fetchall', async function(req, res) {
