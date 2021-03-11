@@ -24,6 +24,12 @@ app.use(function(req, res, next) {
 });
 
 app.get('/:symbol', (req, res) => {
+  console.log(req.secure);
+  console.log(req.get('x-forwarded-proto'));
+  if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== "development") {
+    return res.redirect('https://' + req.get('host') + req.url);
+  }
+
   res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
 });
 
@@ -37,17 +43,27 @@ mongoose.connect(process.env.DATABASE_URL, {
   useUnifiedTopology: true
  });
 
- app.use(session({
-   store: new mongoStore({
-     mongooseConnection: mongoose.connection,
-     ttl: 60 * 24 * 60 * 60 // 60 days
-   }),
-   name: 'stock_ex_data',
-   secret: 'unique-secret',
-   resave: false,
-   saveUninitialized: false
-   // cookie: {maxAge: 30 * 86400 * 1000 } // 30 days
- }));
+app.use(session({
+  store: new mongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 60 * 24 * 60 * 60 // 60 days
+  }),
+  name: 'stock_ex_data',
+  secret: 'unique-secret',
+  resave: false,
+  saveUninitialized: false
+  // cookie: {maxAge: 30 * 86400 * 1000 } // 30 days
+  //  cookie: { maxAge: 30 * 86400 * 1000, secure: true, sameSite: 'lax', httpOnly: true, domain: stockexdata.com }
+}));
+
+// app.use((req, res, next) => {
+//   // The 'x-forwarded-proto' check is for Heroku
+//   if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== "development") {
+//     return res.redirect('https://' + req.get('host') + req.url);
+//   }
+//
+//   next();
+// });
 
 // Routes
 app.use('/api/stocks', stocks)
