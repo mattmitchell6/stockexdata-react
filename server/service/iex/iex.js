@@ -91,8 +91,8 @@ class IEX {
 
       // update or create
       if(!keyStats || moment().isAfter(keyStats.lastUpdated, 'day')) {
-        let keyStatsResult = await axios.get(url);
-        let advancedStatsResult = await axios.get(advancedStatsUrl);
+        const [keyStatsResult, advancedStatsResult] = await Promise.all([axios.get(url), axios.get(advancedStatsUrl)]);
+
         const allStats = {...keyStatsResult.data, ...advancedStatsResult.data}
 
         keyStats = await KeyStats.findOneAndUpdate(
@@ -183,7 +183,8 @@ class IEX {
      * get income data
      */
     static async getIncome(symbol) {
-      let quarterlyIncomeResult, annualIncomeResult, lastReported;
+      let quarterlyIncomeResult, annualIncomeResult
+      let lastReported = moment();
       const quarterlyIncomeUrl = `${baseUrl}/${symbol}/income?last=4&period=quarter&${token}`;
       const annualIncomeUrl = `${baseUrl}/${symbol}/income?last=4&period=annual&${token}`;
 
@@ -198,6 +199,7 @@ class IEX {
 
       // TODO: this needs reworking. IEX needs to figure out the whole "next earnings date" thing
       if(!income || moment().diff(income.lastReported, 'days') > 110) {
+        let quarterlyIncome, annualIncome;
 
         // make calls to fetch last 4 four quarters / years of income statements
         [quarterlyIncomeResult, annualIncomeResult] = await Promise.all([
@@ -205,22 +207,21 @@ class IEX {
           axios.get(annualIncomeUrl)
         ])
 
-        if(!isEmpty(quarterlyIncomeResult.data) && !isEmpty(annualIncomeResult.data)) {
-          quarterlyIncomeResult = JSON.stringify(quarterlyIncomeResult.data.income.reverse());
-          annualIncomeResult = JSON.stringify(annualIncomeResult.data.income.reverse());
-          lastReported = quarterlyIncomeResult[quarterlyIncomeResult.length - 1].reportDate
-        } else {
-          quarterlyIncomeResult = null;
-          annualIncomeResult = null;
-          lastReported = moment();
+        if(!isEmpty(quarterlyIncomeResult.data)) {
+          quarterlyIncome = JSON.stringify(quarterlyIncomeResult.data.income.reverse());
+          lastReported = quarterlyIncome[quarterlyIncome.length - 1].reportDate
+        }
+
+        if(!isEmpty(annualIncomeResult.data)) {
+          annualIncome = JSON.stringify(annualIncomeResult.data.income.reverse());
         }
 
         income = await Income.findOneAndUpdate(
           { 'symbol': symbol.toUpperCase() },
           {
             symbol: symbol.toUpperCase(),
-            quarterlyIncomeData: quarterlyIncomeResult,
-            annualIncomeData: annualIncomeResult,
+            quarterlyIncomeData: quarterlyIncome,
+            annualIncomeData: annualIncome,
             lastReported: lastReported
           },
           { upsert: true, new: true});

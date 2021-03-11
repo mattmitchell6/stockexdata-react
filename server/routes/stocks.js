@@ -138,7 +138,7 @@ router.get('/:symbol/income', async function(req, res) {
     const income = await IEX.getIncome(req.params.symbol);
 
     // populate quarterly income data
-    for(let i = 0; i < income.quarterlyIncomeData.length; i++) {
+    for(let i = 0; income.quarterlyIncomeData && i < income.quarterlyIncomeData.length; i++) {
       fiscalPeriods.quarterly.push(
         `Q${income.quarterlyIncomeData[i].fiscalQuarter} ${income.quarterlyIncomeData[i].fiscalYear}`);
       totalRevenueData.quarterly.push(income.quarterlyIncomeData[i].totalRevenue);
@@ -146,7 +146,7 @@ router.get('/:symbol/income', async function(req, res) {
     }
 
     // populate annual income data
-    for(i = 0; i < income.annualIncomeData.length; i++) {
+    for(i = 0; income.annualIncomeData && i < income.annualIncomeData.length; i++) {
       fiscalPeriods.annual.push(income.annualIncomeData[i].fiscalDate);
       totalRevenueData.annual.push(income.annualIncomeData[i].totalRevenue);
       netIncomeData.annual.push(income.annualIncomeData[i].netIncome);

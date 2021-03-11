@@ -14,6 +14,7 @@ function IncomeCard(props) {
   useEffect(() => {
     async function fetchIncome() {
       const res = await axios.get(`/api/stocks/${props.symbol}/income`)
+      console.log(res.data);
 
       if(res.data) {
         setIncome(res.data.income)
@@ -66,7 +67,6 @@ function IncomeCard(props) {
     <div>
       {incomeData && fiscalPeriods && (
         <div>
-          {/* income card */}
           <div className="card card-body mb20">
             <div className="row mbs">
               <div className="col-sm-5 col-12 mbs">
