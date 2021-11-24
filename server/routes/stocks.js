@@ -19,7 +19,7 @@ router.get('/fetchall', async function(req, res) {
       res.send(JSON.parse(allStocks));
     } else {
       const foundAllStocks = await Company.find({})
-      req.redis.set("allstocks", JSON.stringify(foundAllStocks));
+      req.redis.setex(`allstocks`, SECONDS_IN_DAY, JSON.stringify(foundAllStocks));
       res.send(foundAllStocks);
     }
   })

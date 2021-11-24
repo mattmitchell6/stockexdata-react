@@ -39,7 +39,8 @@
     "eject": "react-scripts eject",
     "api": "node ./server/server.js",
     "dev": "node server/server.js & react-scripts start",
-    "seedStocks": "node seeds/seedStocks.js"
+    "seedStocks": "node seeds/seedStocks.js",
+    "debug": "node ./server/server.js"
   },
   "eslintConfig": {
     "extends": "react-app"
