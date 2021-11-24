@@ -95,18 +95,16 @@ function SearchBar(props) {
           )}
 
           <form onSubmit={handleSubmit} className="mt-4">
-            <div className="input-group mb-3">
+            <div className="search mb-3">
+              <span className="fa fa-search form-control-feedback mt10"></span>
               <input
                 type="text"
                 autoComplete="off"
                 className="form-control"
                 name="symbol"
-                placeholder="BOX, SQ, Apple, ..."
+                placeholder="Search"
                 onChange={filteredResultsHandler}
               />
-              <div className="input-group-append">
-                <button className="btn btn-blue" type="submit" style={{borderRadius: "0 .25rem .25rem 0"}}>Search</button>
-              </div>
 
               <div className="dropdown-menu col-md-12" style={quickSearchStyle}>
                 {quickSearchResults}
@@ -126,7 +124,7 @@ function SearchBar(props) {
               className="form-control form-control-sm"
               style={{width: "250px"}}
               name="symbol"
-              placeholder="stock lookup"
+              placeholder="Search"
               onChange={filteredResultsHandler}
             />
             <div className="dropdown-menu col-md-12" style={quickSearchStyle}>

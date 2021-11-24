@@ -52,7 +52,7 @@ function Home(props) {
         <div className="row d-flex justify-content-center">
 
           <div className="col-md-6">
-            <h4 className="text-center white-text">Search by symbol or company name</h4>
+            <h4 className="text-center white-text d-none d-sm-block">Search by symbol or company name</h4>
 
             <SearchBar type="home" />
           </div>
@@ -65,8 +65,6 @@ function Home(props) {
               </div>
               {renderUserContent()}
             </div>
-            {/* <h5 className="white-text">Watchlist</h5> */}
-            {/* <hr className="white-background"></hr> */}
           </div>
 
         </div>

@@ -48,10 +48,10 @@ function WatchlistItem(props) {
     <div key={props.symbol} className="card-body watchlist-item">
       {quote ? (
         <div className="row" style={{fontSize: "90%"}}>
-          <div className="col-2">
+          <div className="col-2 d-none d-sm-block">
             <img src={quote.logo} height="30px" alt="" className="logo" />
           </div>
-          <div className="col-5 overflow">
+          <div className="col-7 col-sm-5 overflow">
             <a href={`/${props.symbol}`}><h5>{props.symbol}</h5></a>
             <span>{quote.companyName}</span>
           </div>

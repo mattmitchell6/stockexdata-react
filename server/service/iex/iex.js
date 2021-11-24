@@ -207,18 +207,10 @@ class IEX {
       [quarterlyIncomeResult, annualIncomeResult] = await Promise.all([
         axios.get(quarterlyIncomeUrl),
         axios.get(annualIncomeUrl)
-        // axios.get(earningsUrl)
       ])
 
       if (!isEmpty(quarterlyIncomeResult.data)) {
         quarterlyIncome = quarterlyIncomeResult.data.income.reverse();
-        // earnings = earningsResult.data.earnings.reverse();
-
-        // populate earnings dates onto quarterlyIncome array
-        // for (let i = 0; i < quarterlyIncome.length; i++) {
-        //   quarterlyIncome[i].fiscalPeriod = earnings[i].fiscalPeriod
-        // }
-
         lastReported = quarterlyIncome[quarterlyIncome.length - 1].reportDate
         quarterlyIncome = JSON.stringify(quarterlyIncome);
       }

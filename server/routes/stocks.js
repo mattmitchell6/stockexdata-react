@@ -12,6 +12,7 @@ const SECONDS_IN_DAY = 86400
  * get all available stocks for filtering
  */
 router.get('/fetchall', async function(req, res) {
+  req.redis.del('allstocks');
   req.redis.get("allstocks", async (err, allStocks) => {
     if (err) throw err;
 

@@ -9,14 +9,14 @@ function IncomeChart(props) {
     datasets: [{
       label: "Revenue",
       data: props.totalRevenueData,
-      backgroundColor: 'rgba(130, 205, 255, 0.2)',
-      borderColor: '#2BAAFF',
+      backgroundColor: '#D3E4CD',
+      borderColor: '#ADC2A9',
       borderWidth: 1
     }, {
       label: "Earnings",
       data: props.netIncomeData,
-      backgroundColor: 'rgba(255, 208, 227, 0.2)',
-      borderColor: 'rgba(255, 99, 132, 1)',
+      backgroundColor: '#E6C4C0',
+      borderColor: '#CA8A8B',
       borderWidth: 1
     }]
   }

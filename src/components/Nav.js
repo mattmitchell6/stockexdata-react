@@ -40,13 +40,14 @@ function Nav(props) {
 
   return (
     <div>
-      <nav className="navbar navbar-expand-sm navbar-dark">
+      <nav className="navbar navbar-expand-sm navbar-light">
         {/* navbar-dark bg-dark */}
 
         <div className="container">
           <div className="navbar-header">
             <a href="/" className="navbar-brand">
-              <img src={logo} height="45px" alt="" />
+              {/* <img src={logo} height="45px" alt="" /> */}
+              stockex data
             </a>
           </div>
 
