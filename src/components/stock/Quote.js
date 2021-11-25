@@ -97,11 +97,11 @@ function Quote(props) {
               </span>
             )}
           </h4>
-          <h3>
-            <span className="price" style={{fontWeight: "500"}}>{numeral(quote.latestPrice).format('$0,0.00')}</span>
+          <div class="main-info-price">
+            <span >{numeral(quote.latestPrice).format('$0,0.00')}</span>
 
             {dailyChange(quote.dailyChange.change, quote.dailyChange.changePercent)}
-          </h3>
+          </div>
           <div className="textMuted" style={{fontSize: "80%"}}>
             updated {moment(quote.latestUpdate).format('MM/DD h:mm a z')}
           </div>
