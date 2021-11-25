@@ -9,8 +9,8 @@ function IncomeChart(props) {
     datasets: [{
       label: "Revenue",
       data: props.totalRevenueData,
-      backgroundColor: '#D3E4CD',
-      borderColor: '#ADC2A9',
+      backgroundColor: '#D0E8F2',
+      borderColor: '#79A3B1',
       borderWidth: 1
     }, {
       label: "Earnings",

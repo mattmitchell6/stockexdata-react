@@ -1,23 +1,30 @@
+/* Element CSS */
+
 body {
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
-  background-color: #99A799;
-  /* background: linear-gradient(#283c86, #45a247); */
-  /* height: 350ax; */
-  /* background-repeat: no-repeat; */
+  background-color: #79A3B1;
+  /* palette: https://colorhunt.co/palette/fcf8ecd0e8f279a3b1456268 */
 }
 
 h1, h2, h3, h4, h5 {
-  font-weight: 500;
+  font-weight: 600;
+}
+
+a {
+  color: #456268;
 }
 
 a:hover {
   text-decoration: none;
+  color: #79A3B1;
 }
 
+
 /* Navbar Section */
+
 .navbar {
-  background-color: #FEF5ED
+  background-color: #456268
 }
 
 .navbar-brand {
@@ -26,6 +33,7 @@ a:hover {
 
 .login-link {
   cursor: pointer;
+  color: #fff;
 }
 
 .logo {
@@ -33,6 +41,9 @@ a:hover {
   height: auto;
   max-height: 55px;
 }
+
+
+/* Search Bar Section */
 
 .dropdown-menu {
   right: 0% !important;
@@ -60,10 +71,19 @@ a:hover {
 }
 
 
+/* Main Info Card Section */
+.watchlist {
+  font-size: 22px;
+  color: #456268;
+  cursor: pointer;
+}
+
+
 /* Historical Chart Section */
+
 .historical-container {
-  position: relative; 
-  height: 50vh; 
+  position: relative;
+  height: 50vh;
 }
 
 .nav-link {
@@ -71,7 +91,8 @@ a:hover {
 }
 
 .nav-link.active {
-  color: #007bff !important;
+  color: #456268 !important;
+  font-weight: 600;
 }
 
 .nav-link.range {
@@ -80,7 +101,7 @@ a:hover {
 }
 
 .nav-link.range:hover {
-  color: #007bff;
+  color: #79A3B1;
 }
 
 .white-text {
@@ -91,23 +112,6 @@ a:hover {
   background: white;
 }
 
-/* .btn-blue {
-  background-color: #009DAE;
-  border-color: #009DAE;
-  color: white;
-}
-
-.btn-blue:hover {
-  background-color: #71DFE7;
-  border-color: #71DFE7;
-  color: white;
-} */
-
-
-/*.btn {
-  text-transform: uppercase;
-}*/
-
 .text-muted {
   font-size: 90%;
 }
@@ -116,13 +120,31 @@ a:hover {
   font-size: 90%;
 }
 
-.badge-success {
-  /* background-color: #3ecf8e; */
-}
+
+/* News Card Section */
 
 .news {
   text-overflow: ellipsis;
   max-width: 100ch;
+}
+
+.news-image {
+  background-position: 50% center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-origin: border-box;
+  max-height: 148px;
+  max-width: 100%;
+  border-radius: 0.1875rem;
+}
+
+.news-image-container {
+  margin: auto;
+  text-align: center;
+}
+
+.news-link {
+  font-weight: 500;
 }
 
 .btn {
@@ -137,21 +159,8 @@ a:hover {
   transition: all 150ms ease;
 }
 
-.btn:hover {
-  /*transform: translateY(-1px);*/
-}
 
-.btn.btn-success {
-  background-color: #3ecf8e !important;
-  border: none;
-}
-
-.btn.btn-primary {
-  background: #403F57;
-  /*text-transform: uppercase;*/
-  color: #fff;
-  border: none;
-}
+/* Margins */
 
 .mts {
   margin-top: 20px;
@@ -331,42 +340,15 @@ a:hover {
   color: #aaa;
 }
 
-.watchlist {
-  /*border-style: solid;
-  border-color: #007bff;
-  border-radius: 15px;
-  border-width: 1px;
-  padding: 3px 6px;*/
-  /*font-size: 70%;*/
-  font-size: 22px;
-  color: #283c86;
-  cursor: pointer;
-}
-
 .watchlist-item {
   border-top: 2px solid rgba(0, 0, 0, .125);
 }
-
-.watchlist-card {
-  padding: 1rem 1.25rem
-}
-
 
 
 /* Watchlist */
 
 .watchlist-load {
   font-size: 25px;
-}
-
-.news-image {
-  background-position: 50% center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-origin: border-box;
-  width: 100%;
-  /*height: 100%;*/
-  border-radius: 0.1875rem;
 }
 
 a:hover .news.text-muted {
@@ -404,11 +386,14 @@ a:hover .news.text-muted {
   }
 }
 
+/* Basic Info Card Section */
+
 .readmore {
   cursor: pointer;
-  color: #007bff;
+  color: #456268;
+  font-weight: 400;
 }
 
 .readmore:hover {
-  color: #0056B3
+  color: #79A3B1
 }

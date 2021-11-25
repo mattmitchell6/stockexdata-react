@@ -39,7 +39,7 @@ function NewsCard(props) {
               return (
                 <div key={item.url}>
                   <div className="row mbs">
-                    <div className="col-md-4">
+                    <div className="col-md-4 news-image-container">
                       <img className="news-image" src={item.image} alt="" />
                     </div>
                     <div className="col-md-8">
@@ -47,7 +47,9 @@ function NewsCard(props) {
                         <span className="news-date" ></span>{moment(item.datetime).format('MMM DD, YYYY')} | {item.source}
                       </div>
                       <a href={item.url}>
-                        {item.headline}
+                        <div class="news-link">
+                          {item.headline}
+                        </div>                        
                         <div className="text-muted news">
                           {item.summary}
                         </div>

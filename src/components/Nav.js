@@ -1,6 +1,6 @@
 import React from 'react';
 import GoogleLogin from 'react-google-login';
-import logo from '../logo-dark.png';
+import logo from '../logo.png';
 import '../App.css';
 
 import SearchBar from './SearchBar'
@@ -40,7 +40,7 @@ function Nav(props) {
 
   return (
     <div>
-      <nav className="navbar navbar-expand-sm navbar-light">
+      <nav className="navbar navbar-expand-sm navbar-dark">
         {/* navbar-dark bg-dark */}
 
         <div className="container">

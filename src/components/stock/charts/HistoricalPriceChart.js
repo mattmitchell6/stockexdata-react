@@ -8,8 +8,8 @@ function HistoricalPriceChart(props) {
     datasets: [{
       lineTension: 0,
       data: props.prices,
-      backgroundColor: '#D3E4CD',
-      borderColor: '#ADC2A9',
+      backgroundColor: '#D0E8F2',
+      borderColor: '#79A3B1',
       borderWidth: 2
     }]
   }
