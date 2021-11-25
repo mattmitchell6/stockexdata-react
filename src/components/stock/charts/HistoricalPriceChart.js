@@ -64,8 +64,8 @@ function HistoricalPriceChart(props) {
   }
 
   return(
-    <div>
-      <Line data={data} options={options} height={407}/>
+    <div className="historical-container">
+      <Line data={data} options={options} />
     </div>
   )
 }

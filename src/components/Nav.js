@@ -1,6 +1,6 @@
 import React from 'react';
 import GoogleLogin from 'react-google-login';
-import logo from '../logo.png';
+import logo from '../logo-dark.png';
 import '../App.css';
 
 import SearchBar from './SearchBar'
@@ -46,8 +46,8 @@ function Nav(props) {
         <div className="container">
           <div className="navbar-header">
             <a href="/" className="navbar-brand">
-              {/* <img src={logo} height="45px" alt="" /> */}
-              stockex data
+              <img src={logo} height="45px" alt="" />
+              {/* stockex data */}
             </a>
           </div>
 

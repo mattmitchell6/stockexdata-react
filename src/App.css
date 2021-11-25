@@ -25,12 +25,7 @@ a:hover {
 }
 
 .login-link {
-  /* color: #FFF; */
   cursor: pointer;
-}
-
-.login-link:hover {
-  /* color: #FFF; */
 }
 
 .logo {
@@ -64,6 +59,12 @@ a:hover {
   text-overflow: ellipsis;
 }
 
+
+/* Historical Chart Section */
+.historical-container {
+  position: relative; 
+  height: 50vh; 
+}
 
 .nav-link {
   padding: 0rem 0.8rem !important;
