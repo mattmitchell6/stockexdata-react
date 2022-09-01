@@ -269,6 +269,16 @@ class IEX {
   }
 
   /**
+   * remove symbol db entries
+   */
+   static async removeEntry(symbol) {
+    await HistoricalPrices.findOne({'symbol': symbol.toUpperCase()}).deleteOne();
+    await Income.findOne({'symbol': symbol.toUpperCase()}).deleteOne();
+
+    return true;
+  }  
+
+  /**
    * get all stocks available on IEX Symbols
    */
   static async getAllStocks() {

@@ -165,6 +165,20 @@ router.get('/:symbol/income', async function(req, res) {
   }
 });
 
+/**
+ * remove symbol entry
+ */
+ router.get('/:symbol/reset', async function(req, res) {
+  try {
+    console.log("resetting...");
+    await IEX.removeEntry(req.params.symbol)
+    res.sendStatus(200);
+  } catch(e) {
+    console.log(e);
+    res.sendStatus(500)
+  }
+});
+
 
 /**
  * get earnings data

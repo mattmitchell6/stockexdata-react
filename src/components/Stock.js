@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 
 import Nav from './Nav'
@@ -15,13 +16,18 @@ import Loader from './Loader'
 function Stock(props) {
   const [stockExists, setStockExists] = useState("pending")
   const [stock, setStock] = useState(null)
-  const [cardClass, setCardClass] = useState("col-lg-8")
+  const [cardClass, setCardClass] = useState("col-lg-8")  
   const { match: { params } } = props;
+  const queryParams = new URLSearchParams(window.location.search)
+  const resetQuery = queryParams.get("reset")
+  let history = useHistory();
+
 
   useEffect(() => {
+    const symbol = params.symbol.toUpperCase()
+
     async function fetchAllStocks() {
-      let res;
-      const symbol = params.symbol.toUpperCase()
+      let res;      
       res = await axios.get('/api/stocks/fetchall')
       const foundStock = res.data.find((item) => item.symbol === symbol)
 
@@ -30,6 +36,16 @@ function Stock(props) {
       if(foundStock && foundStock.stockType !== "cs") {
         setCardClass("")
       }
+    }
+
+    // delete / reset stock
+    async function resetStock() {
+      await axios.get(`/api/stocks/${symbol}/reset`)
+    }
+
+    if(resetQuery == "true") {
+      resetStock()
+      history.push(`/${symbol}`)
     }
 
     if(stockExists === "pending") {

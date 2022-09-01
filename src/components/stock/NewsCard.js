@@ -47,7 +47,7 @@ function NewsCard(props) {
                         <span className="news-date" ></span>{moment(item.datetime).format('MMM DD, YYYY')} | {item.source}
                       </div>
                       <a href={item.url}>
-                        <div class="news-link">
+                        <div className="news-link">
                           {item.headline}
                         </div>                        
                         <div className="text-muted news">
